@@ -12,7 +12,7 @@ const SessionFields = ({ control }: any) => {
   const fetchSchool = useCallback(async () => {
     try {
       const res = await listPost("schools");
-      const formatOptions = res.data.map((item) => ({
+      const formatOptions = res.data.map((item:any) => ({
         value: item.id,
         label: item.name,
       }));

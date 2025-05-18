@@ -1,6 +1,5 @@
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
-import axios from "axios";
 import Button from "../../components/common/Button";
 import SchoolFields from "../../components/post/SchoolFields";
 import SessionFields from "../../components/post/SessionFields";
@@ -8,8 +7,13 @@ import SectionFields from "../../components/post/SectionFields";
 import { createPost } from "../../services/endpoints/postApi";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { Icons } from "../../assets/icons";
+import ClassFields from "../../components/post/ClassFields";
+import { PostType } from "../../types/postType";
+import EmployeeFields from "../../components/post/EmployeeFields";
+import StudentFields from "../../components/post/StudentFields";
 
-type PostType = "schools" | "sessions" | "sections";
+
 
 interface AddPostProps {
   postType: PostType;
@@ -42,8 +46,14 @@ const AddPost: React.FC<AddPostProps> = ({ postType }) => {
         return <SchoolFields control={control} />;
       case "sessions":
         return <SessionFields control={control} />;
+        case "classes":
+          return <ClassFields control={control} />;
       case "sections":
         return <SectionFields control={control} />;
+        case "employees":
+          return <EmployeeFields control={control} />;
+          case "students":
+            return <StudentFields control={control} />;
       default:
         return null;
     }
@@ -52,6 +62,12 @@ const AddPost: React.FC<AddPostProps> = ({ postType }) => {
   return (
     <div className="w-full h-full flex flex-col items-center  py-12 bg-white ">
       {/* header */}
+      <div onClick={()=>navigate(-1)} className=" w-full cursor-pointer">
+        <span className="w-fit rounded-full p-2 border border-gray-300 flex hover:scale-110 items-center justify-center">
+
+        <Icons.AngleLeft className="size-5"/>
+        </span>
+      </div>
       <div className="flex flex-col  w-full max-w-3xl  gap-8 ">
         <h1 className="text-xl font-semibold capitalize mb-4">
           Add {postType}

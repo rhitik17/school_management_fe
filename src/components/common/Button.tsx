@@ -36,7 +36,7 @@ function Button({
   const getVariantClass = () => {
     switch (variant) {
       case "primary":
-        return `bg-red-600 rounded-lg shadow border border-red-700 hover:bg-red-700 text-white text-base font-semibold`;
+        return `bg-primary-500 rounded-lg shadow border border-primary-600 hover:bg-primary-600 text-white text-base font-semibold`;
       case "secondary":
         return `bg-white rounded-lg shadow border border-zinc-300 text-gray-700 text-base font-semibold hover:bg-gray-50`;
       case "custom":

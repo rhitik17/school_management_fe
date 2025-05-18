@@ -7,6 +7,7 @@ import { Icons } from "../../assets/icons";
 import { logout } from "../../services/endpoints/authService";
 import { toast } from "react-toastify";
 import FormInput from "../common/FormInput";
+import Button from "../common/Button";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -138,13 +139,11 @@ const Header = () => {
             </div>
           </div>
         ) : (
-          <button
-            type="button"
-            onClick={() => navigate("/login")}
-            className="mr-4 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-          >
-            Login
-          </button>
+         <Button
+         text="Login"
+         variant="primary"
+         action={()=>navigate("/login")}
+         />
         )}
       </div>
     </header>

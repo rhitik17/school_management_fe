@@ -55,6 +55,7 @@ export const registerApi = async (formData: RegisterFormData) => {
 
 interface OtpData {
   otp: string;
+  userId?: string;
 }
 
 export const otpVerify = async (formData: OtpData) => {
@@ -97,7 +98,22 @@ interface ForgetPasswordData {
 
 export const forgetPassowrd = async (formData: ForgetPasswordData) => {
   try {
-    const response = await api.post("/systemuser/forgetPassword", formData, {});
+    const payload ={
+      email:formData.input,
+    }
+    const response = await api.post("forgot-password", payload, );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating post:", error);
+    throw error;
+  }
+};
+
+
+
+export const verifyForgotPasswordOTP = async (formData: OtpData) => {
+  try {
+    const response = await api.post("verify-forgot-password-otp", formData);
     return response.data;
   } catch (error) {
     console.error("Error creating post:", error);

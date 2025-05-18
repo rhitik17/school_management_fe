@@ -3,16 +3,21 @@ import useTokenStore, {
   useAuthStore,
   useEmailStore,
 } from "../../stores/tokenStore";
-import { otpVerify, resendOtp } from "../../services/endpoints/authService";
+import {
+  otpVerify,
+  resendOtp,
+  verifyForgotPasswordOTP,
+} from "../../services/endpoints/authService";
 import { toast } from "react-toastify";
 import { SpinningLoader2 } from "../../components/common/loading/SpinningLoader";
 import { Icons } from "../../assets/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface OtpFormData {
   otp: string[];
 }
 const OtpVerify = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState<OtpFormData>({
     otp: Array(6).fill(""),
@@ -21,7 +26,6 @@ const OtpVerify = () => {
   const [error, setError] = useState<string | null>(null);
   const [resendTimer, setResendTimer] = useState(0);
 
-  const { token, setToken } = useTokenStore();
   const { email } = useEmailStore();
   const { userData, setUserData } = useAuthStore();
 
@@ -69,12 +73,19 @@ const OtpVerify = () => {
 
     const otp = formData.otp.join("");
 
-    try {
+    let response;
+
+    try {  
       const payload = {
-        userId: userData?.user.id,
+        userId: id || userData?.user?.id,
         otp: otp,
       };
-      const response = await otpVerify(payload);
+
+      if (id) {
+        response = await verifyForgotPasswordOTP(payload);
+      } else {
+        response = await otpVerify(payload);
+      }
       console.log("otp", response);
 
       if (response) {
@@ -97,7 +108,7 @@ const OtpVerify = () => {
   const handleResendCode = async () => {
     try {
       const payload = {
-        userId: token,
+        userId: userData?.access_token,
         otp: "",
       };
       const response = await resendOtp(payload);

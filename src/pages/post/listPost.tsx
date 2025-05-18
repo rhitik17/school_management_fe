@@ -3,9 +3,10 @@ import Button from "../../components/common/Button";
 import { Icons } from "../../assets/icons";
 import { listPost } from "../../services/endpoints/postApi";
 import { useNavigate } from "react-router-dom";
+import { PostType } from "../../types/postType";
 
 interface ListPostProps {
-  postType: "schools" | "sessions" | "sections";
+  postType:PostType;
 }
 
 export default function ListPost({ postType }: ListPostProps) {

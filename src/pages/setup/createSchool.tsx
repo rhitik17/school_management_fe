@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import FormInput from "../../components/common/FormInput";
-import RedButton from "../../components/common/RedButton";
 import { toast } from "react-toastify";
 import { createSchool } from "../../services/endpoints/authService";
 import { useAuthStore } from "../../stores/tokenStore";
+import Button from "../../components/common/Button";
 
 interface SchoolFormData {
   schoolName: string;
@@ -128,11 +128,12 @@ const CreateSchool = () => {
               )}
             />
 
-            <RedButton
+            <Button
               text="Create School"
               className="h-11 w-full text-base font-semibold"
               disable={isSubmitting}
               loading={isSubmitting}
+              variant="primary"
               loadingPosition="back"
             />
           </form>

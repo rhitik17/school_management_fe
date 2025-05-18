@@ -6,8 +6,8 @@ import {
 } from "../../services/endpoints/authService";
 import { toast } from "react-toastify";
 import FormInput from "../../components/common/FormInput";
-import RedButton from "../../components/common/RedButton";
 import { Icons } from "../../assets/icons";
+import Button from "../../components/common/Button";
 
 interface OtpFormData {
   otp: string[];
@@ -235,11 +235,12 @@ const SetNewPassoword = () => {
 
           {/* Sign In Button */}
 
-          <RedButton
+          <Button
             text="Reset Password"
             className="h-11 w-full flex items-center text-center justify-center"
             disable={loading}
             loading={loading}
+            variant="primary"
             loadingPosition="back"
           />
         </form>

@@ -7,9 +7,9 @@ import useTokenStore, {
 import { useNavigate } from "react-router-dom";
 import FormInput from "../../components/common/FormInput";
 import PasswordInput from "../../components/common/PasswordInput";
-import RedButton from "../../components/common/RedButton";
 import { loginApi } from "../../services/endpoints/authService";
 import { toast } from "react-toastify";
+import Button from "../../components/common/Button";
 
 interface LoginFormData {
   email: string;
@@ -19,7 +19,7 @@ interface LoginFormData {
 const Login = () => {
   const { email } = useEmailStore();
   const navigate = useNavigate();
-const {userData, setUserData} = useAuthStore();
+  const { userData, setUserData } = useAuthStore();
 
   const {
     control,
@@ -132,11 +132,12 @@ const {userData, setUserData} = useAuthStore();
               </a>
             </div>
 
-            <RedButton
+            <Button
               text="Sign In"
               className="h-11 w-full text-base font-semibold"
               disable={isSubmitting}
               loading={isSubmitting}
+              variant="primary"
               loadingPosition="back"
             />
           </form>

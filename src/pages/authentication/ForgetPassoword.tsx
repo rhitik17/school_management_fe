@@ -1,11 +1,11 @@
 "use client";
 import FormInput from "../../components/common/FormInput";
-import RedButton from "../../components/common/RedButton";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { forgetPassowrd } from "../../services/endpoints/authService";
 import { toast } from "react-toastify";
 import { Icons } from "../../assets/icons";
+import Button from "../../components/common/Button";
 
 const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
@@ -38,30 +38,21 @@ const ForgotPassword = () => {
     e.preventDefault();
 
     const validationErrors = validateForm();
-
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
 
-    router(`/set-password/${formData.input}`);
-
     try {
       setLoading(true);
       const response = await forgetPassowrd(formData);
 
-      if (response?.message) {
-        toast.success(response.message);
-        router(`/set-password/${formData.input}`);
-      }
-
-      //   if (response?.results?.token) {
-      //     router.push("/"); // Redirect to home page
-      //   } else {
-      //     toast.error(response?.message || "Login failed"); // Error handling
-      //   }
+      toast.success(response.message);
+      router(`/otp-verify/${response?.data?.id}`);
     } catch (error: any) {
-      toast.error(error.message || "An error occurred. Please try again."); // General error handling
+      toast.error(
+        error?.response.data.message || "An error occurred. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -98,11 +89,12 @@ const ForgotPassword = () => {
             error={errors?.input}
           />
 
-          <RedButton
+          <Button
             text="Reset Password"
             className="h-11 w-full flex items-center justify-center"
             disable={loading}
             loading={loading}
+            variant="primary"
             loadingPosition="back"
           />
         </form>

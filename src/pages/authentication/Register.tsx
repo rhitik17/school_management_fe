@@ -12,8 +12,8 @@ import {
 } from "../../services/endpoints/authService";
 import FormInput from "../../components/common/FormInput";
 import PasswordInput from "../../components/common/PasswordInput";
-import RedButton from "../../components/common/RedButton";
 import CustomDropdown from "../../components/common/CustomSelect";
+import Button from "../../components/common/Button";
 
 const roleOptions = [
   { label: "Admin", value: "ADMIN" },
@@ -169,11 +169,12 @@ const Register = () => {
           />
 
           {/* Sign In Button */}
-          <RedButton
+          <Button
             text="Get started"
             className="h-11 w-full flex items-center text-center justify-center"
             disable={loading}
             loading={loading}
+            variant="primary"
             loadingPosition="back"
           />
         </form>
