@@ -2,16 +2,57 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Icons } from "../../assets/icons";
 import { useAuthStore } from "../../stores/tokenStore";
 
-const navItems = [
-  { name: "Dashboard", icon: <Icons.Home size={20} />, path: "/dashboard" },
-  { name: "Schools", icon: <Icons.School size={20} />, path: "/schools" },
-  { name: "Sessions", icon: <Icons.Calender size={20} />, path: "/sessions" },
-  { name: "Classes", icon: <Icons.Calender size={20} />, path: "/classes" },
-  // { name: "Sections", icon: <Icons.User size={20} />, path: "/sections" },
-  { name: "Students", icon: <Icons.User size={20} />, path: "/students" },
-  { name: "Employees", icon: <Icons.User size={20} />, path: "/employees" },
-
-
+const navSections = [
+  {
+    heading: "Dashboard",
+    items: [
+      {
+        name: "Dashboard",
+        icon: <Icons.Home size={20} />,
+        path: "/dashboard",
+      },
+    ],
+  },
+  {
+    heading: "Academics",
+    items: [
+      {
+        name: "Sessions",
+        icon: <Icons.Calender size={20} />,
+        path: "/sessions",
+      },
+      {
+        name: "Classes",
+        icon: <Icons.Calender size={20} />,
+        path: "/classes",
+      },
+      {
+        name: "Sections",
+        icon: <Icons.Calender size={20} />,
+        path: "/sections",
+      },
+    ],
+  },
+  {
+    heading: "Students",
+    items: [
+      {
+        name: "Students Info",
+        icon: <Icons.User size={20} />,
+        path: "/students",
+      },
+    ],
+  },
+  {
+    heading: "Employees",
+    items: [
+      {
+        name: "Employees Info",
+        icon: <Icons.User size={20} />,
+        path: "/employees",
+      },
+    ],
+  },
 ];
 
 export default function Sidebar() {
@@ -20,37 +61,44 @@ export default function Sidebar() {
   const navigate = useNavigate();
 
   return (
-    <aside className="h-screen w-64 bg-primary_bg  fixed left-0 top-0 flex flex-col  justify-between">
+    <aside className="h-screen w-64 bg-primary_bg fixed left-0 top-0 flex flex-col justify-between">
       <div className="space-y-8">
         {/* Logo / App Name */}
-        <div className="px-6 pt-4 h-20 flex items-center cursor-pointer" onClick={()=>navigate("/dashboard")} >
-          <img src="/images/newLogo.png" alt="" />
-          {/* <h1 className="text-2xl font-bold text-blue-600">
-            {userData?.user.role}
-          </h1> */}
+        <div
+          className="px-6 pt-4 h-20 flex items-center cursor-pointer"
+          onClick={() => navigate("/dashboard")}
+        >
+          <img src="/images/newLogo.png" alt="App Logo" />
         </div>
 
-        {/* Navigation Links */}
-        <nav className=" space-y-2">
-          {navItems.map((item) => (
-            <Link
-              key={item.name}
-              to={item.path}
-              className={`flex items-center gap-3 px-6 py-3 text-sm font-medium hover:bg-blue-100 transition-all ${
-                location.pathname.startsWith(item.path)
-                  ? "bg-primary-100 text-primary-500 font-semibold"
-                  : "text-gray-600"
-              }`}
-            >
-              {item.icon}
-              {item.name}
-            </Link>
+        {/* Navigation Sections */}
+        <nav className="space-y-6 ">
+          {navSections.map((section) => (
+            <div key={section.heading}>
+              <h3 className="px-4 text-xs font-semibold text-gray-500 uppercase mb-2 tracking-wide">
+                {section.heading}
+              </h3>
+              {section.items.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  className={`flex items-center gap-3 px-4 py-2 text-sm transition-all ${
+                    location.pathname.startsWith(item.path)
+                      ? "bg-primary-100 text-primary-500 font-semibold"
+                      : "text-gray-600 hover:bg-blue-100"
+                  }`}
+                >
+                  {item.icon}
+                  {item.name}
+                </Link>
+              ))}
+            </div>
           ))}
         </nav>
       </div>
 
       {/* Logout Button */}
-      <div className="px-6 h-10 border-t flex items-center border-gray-200">
+      <div className="px-6 h-12 border-t flex items-center border-gray-200">
         <button
           className="flex items-center gap-2 text-sm text-red-500 hover:text-red-600 transition-all"
           onClick={() => {

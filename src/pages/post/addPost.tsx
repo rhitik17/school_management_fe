@@ -13,14 +13,13 @@ import { PostType } from "../../types/postType";
 import EmployeeFields from "../../components/post/EmployeeFields";
 import StudentFields from "../../components/post/StudentFields";
 
-
-
 interface AddPostProps {
   postType: PostType;
 }
 
 const AddPost: React.FC<AddPostProps> = ({ postType }) => {
   const navigate = useNavigate();
+
   const {
     handleSubmit,
     control,
@@ -46,29 +45,34 @@ const AddPost: React.FC<AddPostProps> = ({ postType }) => {
         return <SchoolFields control={control} />;
       case "sessions":
         return <SessionFields control={control} />;
-        case "classes":
-          return <ClassFields control={control} />;
+      case "classes":
+        return <ClassFields control={control} />;
       case "sections":
         return <SectionFields control={control} />;
-        case "employees":
-          return <EmployeeFields control={control} />;
-          case "students":
-            return <StudentFields control={control} />;
+      case "employees":
+        return <EmployeeFields control={control} />;
+      case "students":
+        return <StudentFields control={control} />;
       default:
         return null;
     }
   };
 
+  const showFull = ["students", "employees"];
+
   return (
     <div className="w-full h-full flex flex-col items-center  py-12 bg-white ">
       {/* header */}
-      <div onClick={()=>navigate(-1)} className=" w-full cursor-pointer">
+      <div onClick={() => navigate(-1)} className=" w-full cursor-pointer">
         <span className="w-fit rounded-full p-2 border border-gray-300 flex hover:scale-110 items-center justify-center">
-
-        <Icons.AngleLeft className="size-5"/>
+          <Icons.AngleLeft className="size-5" />
         </span>
       </div>
-      <div className="flex flex-col  w-full max-w-3xl  gap-8 ">
+      <div
+        className={`flex flex-col w-full gap-8 ${
+          showFull.includes(postType) ? "px-12" : "max-w-3xl"
+        }`}
+      >
         <h1 className="text-xl font-semibold capitalize mb-4">
           Add {postType}
         </h1>
