@@ -18,10 +18,16 @@ const ROUTES = {
   ADD_CLASS: "/classes/add",
   LIST_SECTION: "/sections",
   ADD_SECTION: "/sections/add",
+  LIST_SUBJECT: "/subjects",
+  ADD_SUBJECT: "/subjects/add",
   LIST_STUDENT: "/students",
   ADD_STUDENT: "/students/add",
   LIST_EMPLOYEE: "/employees",
   ADD_EMPLOYEE: "/employees/add",
+
+  //pages routes
+  ASSIGN_CLASS_TEACHER: "/assign-class-teacher",
+  ASSIGN_SUBJECT: "/assign-subject",
 
   // usermanagement routes
   PROFILE: "/profile",

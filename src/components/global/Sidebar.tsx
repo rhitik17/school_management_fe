@@ -31,6 +31,21 @@ const navSections = [
         icon: <Icons.Calender size={20} />,
         path: "/sections",
       },
+      {
+        name: "Subjects",
+        icon: <Icons.Calender size={20} />,
+        path: "/subjects",
+      },
+      {
+        name: "Assign Class Teacher",
+        icon: <Icons.Calender size={20} />,
+        path: "/assign-class-teacher",
+      },
+      {
+        name: "Assign Subject",
+        icon: <Icons.Calender size={20} />,
+        path: "/assign-subject",
+      },
     ],
   },
   {

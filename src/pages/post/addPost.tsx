@@ -12,6 +12,7 @@ import ClassFields from "../../components/post/ClassFields";
 import { PostType } from "../../types/postType";
 import EmployeeFields from "../../components/post/EmployeeFields";
 import StudentFields from "../../components/post/StudentFields";
+import SubjectFields from "../../components/post/SubjectFields";
 
 interface AddPostProps {
   postType: PostType;
@@ -49,6 +50,8 @@ const AddPost: React.FC<AddPostProps> = ({ postType }) => {
         return <ClassFields control={control} />;
       case "sections":
         return <SectionFields control={control} />;
+      case "subjects":
+        return <SubjectFields control={control} />;
       case "employees":
         return <EmployeeFields control={control} />;
       case "students":
