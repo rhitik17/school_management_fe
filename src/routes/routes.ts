@@ -27,7 +27,7 @@ const ROUTES = {
 
   //pages routes
   ASSIGN_CLASS_TEACHER: "/assign-class-teacher",
-  ASSIGN_SUBJECT: "/assign-subject",
+  CREATE_SUBJECT_GROUP: "/create-subject-group",
 
   // usermanagement routes
   PROFILE: "/profile",

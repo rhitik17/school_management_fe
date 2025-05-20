@@ -4,7 +4,7 @@ import Dashboard from "../pages/dashboard";
 import ListPost from "../pages/post/listPost";
 import AddPost from "../pages/post/addPost";
 import AssignClassTeacher from "../pages/assignClassTeacher";
-import AssignSubject from "../pages/assignSubject";
+import CreateSubjectGroup from "../pages/createSubjectGroup";
 
 export const privateRoutes = [
   { path: ROUTES.DASHBOARD, element: <Dashboard /> },
@@ -23,7 +23,7 @@ export const privateRoutes = [
 
   //Assign Routes
   { path: ROUTES.ASSIGN_CLASS_TEACHER, element: <AssignClassTeacher /> },
-  { path: ROUTES.ASSIGN_SUBJECT, element: <AssignSubject /> },
+  { path: ROUTES.CREATE_SUBJECT_GROUP, element: <CreateSubjectGroup /> },
 
   //User Management Routes
   { path: ROUTES.ADD_STUDENT, element: <AddPost postType="students" /> },
