@@ -46,6 +46,7 @@ const SetNewPassoword = () => {
   };
 
   //to handle change for otp input
+  // @ts-ignore
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
@@ -63,6 +64,7 @@ const SetNewPassoword = () => {
     }
   };
 
+  // @ts-ignore
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
     index: number
@@ -120,6 +122,7 @@ const SetNewPassoword = () => {
   };
 
   //resend otp
+  // @ts-ignore
   const handleResendCode = async () => {
     try {
       const payload = {
@@ -135,8 +138,10 @@ const SetNewPassoword = () => {
     setResendTimer(30);
   };
 
+  // @ts-ignore
   const handlePaste = (
     e: React.ClipboardEvent<HTMLInputElement>,
+    // @ts-ignore
     index: number
   ) => {
     const pasteData = e.clipboardData.getData("text");
@@ -146,6 +151,8 @@ const SetNewPassoword = () => {
         ...prev,
         otp: newOtp,
       }));
+
+      // @ts-ignore
       newOtp.forEach((digit, index) => {
         document.getElementById(`otp-${index}`)?.focus();
       });
@@ -154,10 +161,10 @@ const SetNewPassoword = () => {
   };
 
   return (
-    <div className="w-full flex items-center  justify-center ">
-      <div className="w-full max-w-xl flex flex-col gap-8 items-center justify-center h-screen ">
+    <div className="flex items-center justify-center w-full ">
+      <div className="flex flex-col items-center justify-center w-full h-screen max-w-xl gap-8 ">
         {/* Welcome Section */}
-        <div className="w-full flex flex-col justify-center text-center gap-3 ">
+        <div className="flex flex-col justify-center w-full gap-3 text-center ">
           <h2 className="text-3xl font-semibold text-zinc-900">
             Set new Password
           </h2>
@@ -169,7 +176,7 @@ const SetNewPassoword = () => {
         {/* Login Form */}
         <form
           onSubmit={handleSubmit}
-          className="w-full flex flex-col gap-4  bg-white  "
+          className="flex flex-col w-full gap-4 bg-white "
         >
           <div className="flex flex-col gap-4">
             <FormInput
@@ -207,21 +214,21 @@ const SetNewPassoword = () => {
           <p className="flex flex-row items-center justify-start gap-2">
             <FormInput
               type="checkbox"
-              className="bg-gray-300 rounded-full p-1 text-white"
+              className="p-1 text-white bg-gray-300 rounded-full"
             />
             <span>Must be at least 8 characters</span>{" "}
           </p>
           <p className="flex flex-row items-center justify-start gap-2">
             <FormInput
               type="checkbox"
-              className="bg-gray-300 rounded-full p-1 text-white"
+              className="p-1 text-white bg-gray-300 rounded-full"
             />{" "}
             <span> Must contain one special character</span>
           </p>
 
           {/* otp resend */}
           {/* <div className="flex items-center justify-end ">
-                        <div className="w-full flex items-center justify-end">
+                        <div className="flex items-center justify-end w-full">
                             <button
                                 type="button"
                                 className="text-sm text-red-600 hover:text-red-500"
@@ -237,7 +244,7 @@ const SetNewPassoword = () => {
 
           <Button
             text="Reset Password"
-            className="h-11 w-full flex items-center text-center justify-center"
+            className="flex items-center justify-center w-full text-center h-11"
             disable={loading}
             loading={loading}
             variant="primary"
@@ -246,7 +253,7 @@ const SetNewPassoword = () => {
         </form>
 
         {/* Footer */}
-        <div className="text-sm text-gray-600 flex flex-row justify-center items-center gap-2">
+        <div className="flex flex-row items-center justify-center gap-2 text-sm text-gray-600">
           <a href="/login">
             <Icons.ArrowRight className="rotate-180" />
           </a>

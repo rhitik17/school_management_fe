@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
-import useTokenStore, {
+import {
   useAuthStore,
   useEmailStore,
 } from "../../stores/tokenStore";
@@ -19,7 +19,7 @@ interface LoginFormData {
 const Login = () => {
   const { email } = useEmailStore();
   const navigate = useNavigate();
-  const { userData, setUserData } = useAuthStore();
+  const {setUserData } = useAuthStore();
 
   const {
     control,
@@ -61,12 +61,12 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gray-50 flex items-center justify-center px-4 py-8">
-      <div className="w-full max-w-lg bg-white rounded-xl shadow-lg">
-        <div className="p-6 sm:p-8 md:p-10 space-y-8">
+    <div className="flex items-center justify-center w-full min-h-screen px-4 py-8 bg-gray-50">
+      <div className="w-full max-w-lg bg-white shadow-lg rounded-xl">
+        <div className="p-6 space-y-8 sm:p-8 md:p-10">
           {/* Welcome Section */}
-          <div className="text-center space-y-2">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          <div className="space-y-2 text-center">
+            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
               Welcome back
             </h2>
             <p className="text-base text-gray-600">
@@ -126,7 +126,7 @@ const Login = () => {
             <div className="flex items-center justify-end">
               <a
                 href="/forgot-password"
-                className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+                className="text-sm font-medium text-gray-700 transition-colors hover:text-gray-900"
               >
                 Forgot password?
               </a>
@@ -134,7 +134,7 @@ const Login = () => {
 
             <Button
               text="Sign In"
-              className="h-11 w-full text-base font-semibold"
+              className="w-full text-base font-semibold h-11"
               disable={isSubmitting}
               loading={isSubmitting}
               variant="primary"
@@ -143,11 +143,11 @@ const Login = () => {
           </form>
 
           {/* Footer */}
-          <div className="text-center text-sm text-gray-600">
+          <div className="text-sm text-center text-gray-600">
             Don't have an account?{" "}
             <a
               href="/register"
-              className="font-semibold text-gray-900 hover:text-gray-700 transition-colors"
+              className="font-semibold text-gray-900 transition-colors hover:text-gray-700"
             >
               Sign up
             </a>

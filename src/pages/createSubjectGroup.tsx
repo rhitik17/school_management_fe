@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import FormInput from "../components/common/FormInput";
 import CustomDropdown from "../components/common/CustomSelect";
 import Button from "../components/common/Button";
-import { listPost } from "../services/endpoints/postApi";
+
 
 const CreateSubjectGroup = () => {
-  const { control, handleSubmit, watch, setValue, getValues } = useForm({
+  const { control, handleSubmit, watch, setValue,  } = useForm({
     defaultValues: {
       name: "",
       classId: "",
@@ -16,15 +16,18 @@ const CreateSubjectGroup = () => {
   });
 
   // Dropdown options
+  // @ts-ignore
   const [classOptions, setClassOptions] = useState<
     { value: string; label: string }[]
   >([]);
   const [sectionOptions, setSectionOptions] = useState<
     { value: string; label: string }[]
   >([]);
+  // @ts-ignore
   const [subjectOptions, setSubjectOptions] = useState<
     { value: string; label: string }[]
   >([]);
+  // @ts-ignore
   const [teacherOptions, setTeacherOptions] = useState<
     { value: string; label: string }[]
   >([]);
@@ -95,7 +98,7 @@ const CreateSubjectGroup = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 space-y-8 bg-white rounded shadow">
+    <div className="max-w-3xl p-6 mx-auto space-y-8 bg-white rounded shadow">
       <h2 className="text-xl font-bold">Create Subject Group</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Name */}
@@ -141,7 +144,7 @@ const CreateSubjectGroup = () => {
             const value: string[] = field.value || [];
             return (
               <div>
-                <label className="block font-medium mb-2 text-sm">
+                <label className="block mb-2 text-sm font-medium">
                   Select Sections
                 </label>
                 <div className="grid gap-2">
@@ -184,13 +187,14 @@ const CreateSubjectGroup = () => {
 
         {/* Subject-Teacher Pairs */}
         <div className="space-y-3">
-          <label className="block font-medium mb-2 text-sm">
+          <label className="block mb-2 text-sm font-medium">
             Subject-Teacher Mapping
           </label>
 
           <div className="space-y-3">
+            {/* @ts-ignore */}
             {subjectTeachers.map((row: any, idx: number) => (
-              <div key={idx} className="flex gap-4 items-center">
+              <div key={idx} className="flex items-center gap-4">
                 <Controller
                   name={`subjectTeachers.${idx}.subjectId`}
                   control={control}
@@ -228,7 +232,7 @@ const CreateSubjectGroup = () => {
                 {subjectTeachers.length > 1 && (
                   <button
                     type="button"
-                    className="text-red-500 hover:text-red-700 text-lg font-bold px-2"
+                    className="px-2 text-lg font-bold text-red-500 hover:text-red-700"
                     onClick={() => removeSubjectTeacher(idx)}
                   >
                     &minus;

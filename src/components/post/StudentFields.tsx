@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Controller, useWatch } from "react-hook-form";
+import { useState } from "react";
+import { Controller, } from "react-hook-form";
 import FormInput from "../common/FormInput";
 
 const tabs = ["Personal Info", "Guardian Info", "Document Info"];
@@ -33,11 +33,11 @@ const StudentFields = ({ control }: any) => {
 
       {/* Tab Content */}
       {activeTab === "Personal Info" && (
-        <div className="space-y-8 w-full">
+        <div className="w-full space-y-8">
           <div className="flex gap-x-8">
             {/* Academic Information */}
-            <div className="space-y-4 w-1/2 bg-primary-50 rounded-md px-4 py-4">
-              <h2 className="text-lg font-semibold border-b border-black  w-fit">
+            <div className="w-1/2 px-4 py-4 space-y-4 rounded-md bg-primary-50">
+              <h2 className="text-lg font-semibold border-b border-black w-fit">
                 Academic Information
               </h2>
               <div className="grid gap-4 sm:grid-cols-2">
@@ -101,8 +101,8 @@ const StudentFields = ({ control }: any) => {
             </div>
 
             {/* Personal Info */}
-            <div className="space-y-4 w-1/2  bg-primary-50 rounded-md px-4 py-4">
-              <h2 className="text-lg font-semibold  border-b border-black  w-fit">
+            <div className="w-1/2 px-4 py-4 space-y-4 rounded-md bg-primary-50">
+              <h2 className="text-lg font-semibold border-b border-black w-fit">
                 Personal Information
               </h2>
               <div className="grid gap-4 sm:grid-cols-2">
@@ -196,7 +196,7 @@ const StudentFields = ({ control }: any) => {
                   <img
                     src={previewUrl}
                     alt="Student Preview"
-                    className="h-32 w-32 object-contain rounded-md"
+                    className="object-contain w-32 h-32 rounded-md"
                   />
                 )}
               </div>
@@ -205,8 +205,8 @@ const StudentFields = ({ control }: any) => {
 
           <div className="flex gap-x-8">
             {/* Contact Information */}
-            <div className="space-y-4 w-1/2  bg-primary-50 rounded-md px-4 py-4">
-              <h2 className="text-lg font-semibold  border-b border-black  w-fit">
+            <div className="w-1/2 px-4 py-4 space-y-4 rounded-md bg-primary-50">
+              <h2 className="text-lg font-semibold border-b border-black w-fit">
                 Contact Information
               </h2>
               <div className="grid gap-4 sm:grid-cols-2">
@@ -239,8 +239,8 @@ const StudentFields = ({ control }: any) => {
             </div>
 
             {/* Student Address Info */}
-            <div className="space-y-4 w-1/2  bg-primary-50 rounded-md px-4 py-4">
-              <h2 className="text-lg font-semibold  border-b border-black  w-fit">
+            <div className="w-1/2 px-4 py-4 space-y-4 rounded-md bg-primary-50">
+              <h2 className="text-lg font-semibold border-b border-black w-fit">
                 Student Address Info
               </h2>
               <div className="grid gap-4 sm:grid-cols-2">
@@ -273,8 +273,8 @@ const StudentFields = ({ control }: any) => {
           </div>
 
           {/* Medical Record */}
-          <div className="space-y-4 w-1/2  bg-primary-50 rounded-md px-4 py-4">
-            <h2 className="text-lg font-semibold  border-b border-black  w-fit">
+          <div className="w-1/2 px-4 py-4 space-y-4 rounded-md bg-primary-50">
+            <h2 className="text-lg font-semibold border-b border-black w-fit">
               Medical Record
             </h2>
             <div className="grid gap-4 sm:grid-cols-2">

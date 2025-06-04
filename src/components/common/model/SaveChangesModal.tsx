@@ -1,5 +1,4 @@
 import Popup from "./Popup";
-import { useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 
 type PropsType = {
@@ -15,7 +14,7 @@ const SaveChangesModal = ({
   handleSave,
   loading,
 }: PropsType) => {
-  const navigate = useNavigate();
+  
   return (
     <div>
       <Popup
@@ -27,19 +26,19 @@ const SaveChangesModal = ({
       >
         <div className="w-full h-[188px] bg-white  shadow-lg  flex flex-col justify-between items-center p-6">
           <div className="w-full">
-            <div className="w-full flex justify-between">
-              <h3 className="text-zinc-900 text-lg font-semibold mb-2">
+            <div className="flex justify-between w-full">
+              <h3 className="mb-2 text-lg font-semibold text-zinc-900">
                 Are you sure you want to save changes?
               </h3>
               <span onClick={handleClose}>
                 <CloseIcon className="text-gray-600 cursor-pointer" />
               </span>
             </div>
-            <p className="text-zinc-900 text-base">
+            <p className="text-base text-zinc-900">
               This will save your changes and update the data.
             </p>
           </div>
-          <div className="flex justify-end gap-3 w-full">
+          <div className="flex justify-end w-full gap-3">
             <button
               className="px-4 py-2.5 bg-white rounded-lg shadow border border-zinc-300 text-gray-700 text-base font-semibold"
               onClick={handleClose}

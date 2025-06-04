@@ -1,6 +1,7 @@
 import * as React from "react"
+// @ts-ignore
 import * as TabsPrimitive from "@radix-ui/react-tabs"
-
+// @ts-ignore
 import { cn } from "@/lib/utils"
 
 const Tabs = TabsPrimitive.Root

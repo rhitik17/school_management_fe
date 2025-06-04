@@ -16,7 +16,6 @@ import {
   LuPhoneCall,
   LuLoaderCircle,
   LuPrinter,
-  LuCheck,
   LuSchool,
   LuCalendar,
   LuUsers,
@@ -24,7 +23,7 @@ import {
 } from "react-icons/lu";
 import { LuMail } from "react-icons/lu";
 import { MdOutlineFileUpload } from "react-icons/md";
-import { BsCheckCircle, BsCheckLg } from "react-icons/bs";
+import { BsCheckCircle,} from "react-icons/bs";
 import { GoPeople } from "react-icons/go";
 import { IoClose } from "react-icons/io5";
 import { RiHome6Line } from "react-icons/ri";

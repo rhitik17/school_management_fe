@@ -1,8 +1,8 @@
-import useTokenStore, { useAuthStore } from "../stores/tokenStore";
+import  { useAuthStore } from "../stores/tokenStore";
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "http://localhost:8000/api/v1/",
+  baseURL: "https://smsbe-production.up.railway.app/api/v1/",
   // baseURL: "https://worthwhile-siusan-visionsapi-a12554b9.koyeb.app/api/v1/",
 });
 

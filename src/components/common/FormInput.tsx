@@ -114,6 +114,7 @@ const FormInput: React.FC<InputProps> = ({
   };
 
   // Handle date change for Nepali date picker
+  // @ts-ignore
   const handleDateChange = useCallback((dateValue: string) => {
     onChange?.({
       target: { name, value: dateValue },
@@ -121,6 +122,7 @@ const FormInput: React.FC<InputProps> = ({
   }, [name, onChange]);
 
   // Handle unicode value change
+  // @ts-ignore
   const handleUnicodeChange = useCallback((event: any, unicodeValue: string) => {
     onChange?.({
       target: { name, value: unicodeValue },
@@ -155,7 +157,7 @@ const FormInput: React.FC<InputProps> = ({
     //         options={{ calenderLocale: "ne", valueLocale: "en" }}
     //       />
     //       <svg
-    //         className="w-5 h-5 absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+    //         className="absolute w-5 h-5 text-gray-500 -translate-y-1/2 pointer-events-none right-2 top-1/2"
     //         fill="none"
     //         stroke="currentColor"
     //         viewBox="0 0 24 24"
@@ -193,7 +195,7 @@ const FormInput: React.FC<InputProps> = ({
   //   if (lang !== "unicode") return null;
     
   //   return (
-  //     <div className="w-full flex-1 px-2 py-2">
+  //     <div className="flex-1 w-full px-2 py-2">
   //       <Nepali
   //         funcname="unicodify"
   //         value={value as string}
@@ -210,7 +212,7 @@ const FormInput: React.FC<InputProps> = ({
       {renderLabel()}
       <div className={borderClassNames}>
         {iconPosition === "start" && children && (
-          <span className="text-gray-500 h-full flex items-center justify-center w-auto">
+          <span className="flex items-center justify-center w-auto h-full text-gray-500">
             {children}
           </span>
         )}
@@ -219,12 +221,12 @@ const FormInput: React.FC<InputProps> = ({
         {/* {renderUnicode()} */}
 
         {iconPosition === "end" && children && (
-          <span className="text-gray-500 h-full flex items-center justify-center w-auto min-w-fit flex-shrink-0">
+          <span className="flex items-center justify-center flex-shrink-0 w-auto h-full text-gray-500 min-w-fit">
             {children}
           </span>
         )}
       </div>
-      {error && <span className="text-red-500 text-xs">{error}</span>}
+      {error && <span className="text-xs text-red-500">{error}</span>}
     </div>
   );
 };

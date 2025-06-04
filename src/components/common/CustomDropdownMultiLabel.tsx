@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Icons } from "@/assets/icons";
+import { Icons } from "../../assets/icons"; 
 import { debounce } from "lodash";
 
 interface Option {
@@ -163,11 +163,11 @@ const CustomDropdownMultiLabel = ({
     }
 
     return isMulti ? (
-      <div className="flex items-center overflow-y-auto gap-1">
+      <div className="flex items-center gap-1 overflow-y-auto">
         {selectedLabels.map((txt, i) => (
           <span
             key={i}
-            className="px-2 py-1 text-white rounded-md bg-blue-500 font-semibold"
+            className="px-2 py-1 font-semibold text-white bg-blue-500 rounded-md"
           >
             {txt}
           </span>
@@ -186,7 +186,7 @@ const CustomDropdownMultiLabel = ({
     <div className={`relative w-full`} ref={dropdownRef}>
       <div className="w-full flex flex-col gap-1.5">
         {label && (
-          <label className="text-gray-700 text-sm font-bold flex items-center gap-1">
+          <label className="flex items-center gap-1 text-sm font-bold text-gray-700">
             {label}
             {required && <span className="text-red-500">*</span>}
           </label>
@@ -203,7 +203,7 @@ const CustomDropdownMultiLabel = ({
                 <img
                   src={icon}
                   alt="dropdown icon"
-                  className="w-5 h-5 object-contain"
+                  className="object-contain w-5 h-5"
                 />
               ) : (
                 icon
@@ -232,7 +232,7 @@ const CustomDropdownMultiLabel = ({
       </div>
 
       {/* Error message display */}
-      {error && <span className="text-red-500 text-xs ">{error}</span>}
+      {error && <span className="text-xs text-red-500 ">{error}</span>}
 
       {isOpen && (
         <>
@@ -246,7 +246,7 @@ const CustomDropdownMultiLabel = ({
             } ${dropDownClass}`}
           >
             {showSearch && (
-              <div className="h-9 px-2 m-1 bg-neutral-100 rounded-lg justify-between items-center flex gap-2 mb-2">
+              <div className="flex items-center justify-between gap-2 px-2 m-1 mb-2 rounded-lg h-9 bg-neutral-100">
                 <Icons.Search
                   fontSize="small"
                   className="text-sm text-gray-500"
@@ -286,7 +286,7 @@ const CustomDropdownMultiLabel = ({
 
                     {loadMore && (
                       <div
-                        className="w-full mt-2 px-4 py-2 text-xs border-t border-gray-200 cursor-pointer hover:bg-gray-100"
+                        className="w-full px-4 py-2 mt-2 text-xs border-t border-gray-200 cursor-pointer hover:bg-gray-100"
                         onClick={handleLoadMore}
                       >
                         <span>Load more...</span>

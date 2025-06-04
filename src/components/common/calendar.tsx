@@ -1,7 +1,10 @@
 import * as React from "react"
+// @ts-ignore
 import { ChevronLeft, ChevronRight } from "lucide-react"
+// @ts-ignore
 import { DayPicker } from "react-day-picker"
 
+// @ts-ignore
 import { cn } from "@/lib/utils"
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
@@ -52,10 +55,10 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        IconLeft: ({ className, ...props }) => (
+        IconLeft: ({ className, ...props }: any) => (
           <ChevronLeft className={cn("h-4 w-4", className)} {...props} />
         ),
-        IconRight: ({ className, ...props }) => (
+        IconRight: ({ className, ...props }: any) => (
           <ChevronRight className={cn("h-4 w-4", className)} {...props} />
         ),
       }}

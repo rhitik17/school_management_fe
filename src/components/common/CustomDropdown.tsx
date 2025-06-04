@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Icons } from "@/assets/icons";
+import { Icons } from "../../assets/icons"; 
 
 interface Option {
   value: string;
@@ -32,7 +32,6 @@ const CustomDropdownValue = ({
   options,
   isMulti = false,
   placeholder = "Select",
-  icon,
   onChange,
   value,
   className = "",
@@ -88,7 +87,7 @@ const CustomDropdownValue = ({
       if (selectedButton) {
         return (
           <div className="flex items-center gap-2">
-            {selectedButton.icon && <span className="w-5 h-5 flex items-center justify-center">{selectedButton.icon}</span>}
+            {selectedButton.icon && <span className="flex items-center justify-center w-5 h-5">{selectedButton.icon}</span>}
             <span>{selectedButton.value}</span>
           </div>
         );
@@ -102,20 +101,20 @@ const CustomDropdownValue = ({
   return (
     <div className="relative w-full space-y-1.5" ref={dropdownRef}>
       {label && (
-        <label className="text-gray-700 text-sm font-bold flex items-center gap-1">
+        <label className="flex items-center gap-1 text-sm font-bold text-gray-700">
           {label} {required && <span className="text-red-500">*</span>}
         </label>
       )}
       <div
-        className={`w-full cursor-pointer rounded-lg text-[16px] flex items-center justify-between px-3 py-2 text-sm bg-white border ${
+        className={`w-full cursor-pointer rounded-lg  flex items-center justify-between px-3 py-2 text-sm bg-white border ${
           error ? "border-red-500" : "border-gray-300"
         } ${className}`}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="capitalize text-gray-700 text-base font-normal">{getDisplayValue()}</span>
+        <span className="text-base font-normal text-gray-700 capitalize">{getDisplayValue()}</span>
         <Icons.AngleDown className={`w-4 h-4 transition-transform duration-200 text-gray-500 ${isOpen ? "rotate-180" : ""}`} />
       </div>
-      {error && <span className="text-red-500 text-xs">{error}</span>}
+      {error && <span className="text-xs text-red-500">{error}</span>}
       {isOpen && (
         <div
           className={`absolute z-10 min-w-44 max-w-full mt-1 bg-white border rounded-lg shadow-lg h-auto ${
@@ -123,7 +122,7 @@ const CustomDropdownValue = ({
           } ${dropDownClass}`}
         >
           {showSearch && (
-            <div className="h-9 px-2 m-1 bg-neutral-100 rounded-lg flex gap-2 mb-2 items-center">
+            <div className="flex items-center gap-2 px-2 m-1 mb-2 rounded-lg h-9 bg-neutral-100">
               <Icons.Search fontSize="small" className="text-sm text-gray-500" />
               <input
                 type="text"
@@ -147,7 +146,7 @@ const CustomDropdownValue = ({
           ))}
           {buttons && (
             <>
-              <div className="w-full flex border" />
+              <div className="flex w-full border" />
               {buttons.map((button) => (
                 <div
                   key={button.value}

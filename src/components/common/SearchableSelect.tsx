@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Icons } from "@/assets/icons";
 import { debounce } from "lodash";
 import { BiPlus } from "react-icons/bi";
 //@ts-ignore
 import preeti from "preeti";
 import { toast } from "react-toastify";
+import { Icons } from "../../assets/icons";
 interface Option {
   value: string;
   label: string;
@@ -35,14 +35,17 @@ const SearchableSelect = ({
   options = [],
   isMulti = false,
   placeholder = "Select",
+  // @ts-ignore
   icon,
   onChange,
   value,
   className = "",
+  // @ts-ignore
   dropdownPosition,
   dropDownClass,
   required = false,
   error,
+  // @ts-ignore
   onCreateOption,
   dataFetchFn,
   onAddFn,
@@ -62,6 +65,7 @@ const SearchableSelect = ({
       ? [value as string]
       : []
   );
+  // @ts-ignore
   const [isCreating, setIsCreating] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   // Fetch items based on search term
@@ -138,11 +142,11 @@ const SearchableSelect = ({
       return placeholder;
     }
     return isMulti ? (
-      <div className="flex items-center overflow-y-auto gap-1">
+      <div className="flex items-center gap-1 overflow-y-auto">
         {selectedLabels.map((txt, i) => (
           <span
             key={i}
-            className="px-2 py-1 text-white rounded-md bg-blue-500 font-semibold"
+            className="px-2 py-1 font-semibold text-white bg-blue-500 rounded-md"
           >
             {txt}
           </span>
@@ -172,7 +176,7 @@ const SearchableSelect = ({
     <div className="relative w-full" ref={dropdownRef}>
       <div className="w-full flex flex-col gap-1.5">
         {label && (
-          <label className="text-gray-700 text-sm font-bold flex items-center gap-1">
+          <label className="flex items-center gap-1 text-sm font-bold text-gray-700">
             {label}
             {required && <span className="text-red-500">*</span>}
           </label>
@@ -183,7 +187,7 @@ const SearchableSelect = ({
           } ${className}`}
           onClick={() => setIsOpen(!isOpen)}
         >
-          <span className="capitalize text-gray-700 font-normal">
+          <span className="font-normal text-gray-700 capitalize">
             {getDisplayValue()}
           </span>
           <Icons.AngleDown
@@ -193,7 +197,7 @@ const SearchableSelect = ({
           />
         </div>
       </div>
-      {error && <span className="text-red-500 text-xs">{error}</span>}
+      {error && <span className="text-xs text-red-500">{error}</span>}
       {isOpen && (
         <div
           className={`absolute z-10 w-full mt-1 bg-white border rounded-lg border-gray-200 ${dropDownClass}`}
@@ -212,26 +216,26 @@ const SearchableSelect = ({
                 placeholder="Search or create..."
                 onClick={(e) => e.stopPropagation()}
               />
-              <Icons.Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Icons.Search className="absolute w-4 h-4 text-gray-400 transform -translate-y-1/2 left-2 top-1/2" />
             </div>
           </div>
-          <div className="max-h-60 overflow-y-auto">
+          <div className="overflow-y-auto max-h-60">
             {isLoading ? (
               <div className="px-4 py-2 text-sm text-gray-500">Loading...</div>
             ) : (
               <>
                 {searchQuery && (
-                  <div className="p-2 flex justify-end border-b">
+                  <div className="flex justify-end p-2 border-b">
                     <button
                       type="button"
-                      className="w-full max-w-max px-4 py-2 text-sm text-white bg-red-500 rounded-lg hover:bg-red-600 disabled:bg-red-300"
+                      className="w-full px-4 py-2 text-sm text-white bg-red-500 rounded-lg max-w-max hover:bg-red-600 disabled:bg-red-300"
                       onClick={async () => handleOptionAddFn()}
                       disabled={isCreating}
                     >
                       {isCreating ? (
                         "Creating..."
                       ) : (
-                        <span className=" flex items-center gap-1">
+                        <span className="flex items-center gap-1 ">
                           <BiPlus />
                           Add
                         </span>

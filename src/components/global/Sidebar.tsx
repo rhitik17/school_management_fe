@@ -1,6 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Icons } from "../../assets/icons";
-import { useAuthStore } from "../../stores/tokenStore";
 
 const navSections = [
   {
@@ -72,15 +71,14 @@ const navSections = [
 
 export default function Sidebar() {
   const location = useLocation();
-  const { userData } = useAuthStore();
   const navigate = useNavigate();
 
   return (
-    <aside className="h-screen w-64 bg-primary_bg fixed left-0 top-0 flex flex-col justify-between">
+    <aside className="fixed top-0 left-0 flex flex-col justify-between w-64 h-screen bg-primary_bg">
       <div className="space-y-8">
         {/* Logo / App Name */}
         <div
-          className="px-6 pt-4 h-20 flex items-center cursor-pointer"
+          className="flex items-center h-20 px-6 pt-4 cursor-pointer"
           onClick={() => navigate("/dashboard")}
         >
           <img src="/images/newLogo.png" alt="App Logo" />
@@ -90,7 +88,7 @@ export default function Sidebar() {
         <nav className="space-y-6 ">
           {navSections.map((section) => (
             <div key={section.heading}>
-              <h3 className="px-4 text-xs font-semibold text-gray-500 uppercase mb-2 tracking-wide">
+              <h3 className="px-4 mb-2 text-xs font-semibold tracking-wide text-gray-500 uppercase">
                 {section.heading}
               </h3>
               {section.items.map((item) => (
@@ -113,9 +111,9 @@ export default function Sidebar() {
       </div>
 
       {/* Logout Button */}
-      <div className="px-6 h-12 border-t flex items-center border-gray-200">
+      <div className="flex items-center h-12 px-6 border-t border-gray-200">
         <button
-          className="flex items-center gap-2 text-sm text-red-500 hover:text-red-600 transition-all"
+          className="flex items-center gap-2 text-sm text-red-500 transition-all hover:text-red-600"
           onClick={() => {
             // Handle logout logic here
           }}

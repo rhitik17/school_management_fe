@@ -1,4 +1,3 @@
-import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import CustomDropdown from "../components/common/CustomSelect";
 import Button from "../components/common/Button";
@@ -35,7 +34,7 @@ const AssignClassTeacher = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto  p-6 space-y-8 bg-white rounded shadow">
+    <div className="max-w-3xl p-6 mx-auto space-y-8 bg-white rounded shadow">
       <h2 className="text-xl font-bold ">Assign Class Teacher</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Class Dropdown */}
@@ -83,7 +82,7 @@ const AssignClassTeacher = () => {
           rules={{ required: "Please select a teacher" }}
           render={({ field, fieldState }) => (
             <div>
-              <label className="block font-medium mb-2">Select Teacher</label>
+              <label className="block mb-2 font-medium">Select Teacher</label>
               <div className="flex flex-col gap-2">
                 {teacherList.map((teacher) => (
                   <label key={teacher.value} className="flex items-center gap-2">
@@ -98,7 +97,7 @@ const AssignClassTeacher = () => {
                 ))}
               </div>
               {fieldState.error && (
-                <span className="text-red-500 text-xs">{fieldState.error.message}</span>
+                <span className="text-xs text-red-500">{fieldState.error.message}</span>
               )}
             </div>
           )}

@@ -3,7 +3,6 @@ import { api } from "../api";
 interface LoginData {
   email: string;
   password: string;
-  connectedTo?: string;
 }
 
 export const loginApi = async (formData: LoginData) => {
@@ -18,7 +17,7 @@ export const loginApi = async (formData: LoginData) => {
 
 export const logout = async () => {
   try {
-    const response = await api.get("logout");
+    const response = await api.get("logout/");
     return response.data;
   } catch (error) {
     console.error("Error creating post:", error);
@@ -45,7 +44,7 @@ export const registerApi = async (formData: RegisterFormData) => {
       password: formData.password,
       role: "ADMIN",
     };
-    const response = await api.post("signup", payload);
+    const response = await api.post("signup/", payload);
     return response.data;
   } catch (error) {
     console.error("Error creating post:", error);
@@ -60,7 +59,7 @@ interface OtpData {
 
 export const otpVerify = async (formData: OtpData) => {
   try {
-    const response = await api.post("verify-otp", formData);
+    const response = await api.post("validate-otp/", formData);
     return response.data;
   } catch (error) {
     console.error("Error creating post:", error);

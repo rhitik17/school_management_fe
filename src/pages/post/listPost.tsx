@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import Button from "../../components/common/Button";
 import { Icons } from "../../assets/icons";
 import { listPost } from "../../services/endpoints/postApi";
@@ -43,17 +43,17 @@ export default function ListPost({ postType }: ListPostProps) {
   return (
     <div className="p-6">
       {/* Header with title and Add button */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold capitalize text-gray-800">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-semibold text-gray-800 capitalize">
           {postType}
         </h1>
         <Button variant="primary" text={`Add ${postType}`}  action={()=>navigate(`/${postType}/add`)}/>
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto bg-white rounded-2xl shadow-md">
-        <table className="min-w-full divide-y divide-gray-200 text-sm">
-          <thead className="bg-gray-100 text-gray-600 text-left">
+      <div className="overflow-x-auto bg-white shadow-md rounded-2xl">
+        <table className="min-w-full text-sm divide-y divide-gray-200">
+          <thead className="text-left text-gray-600 bg-gray-100">
             <tr>
               <th className="px-4 py-3">#</th>
               <th className="px-4 py-3 capitalize">
@@ -71,7 +71,7 @@ export default function ListPost({ postType }: ListPostProps) {
               </tr>
             ) : data.length === 0 ? (
               <tr>
-                <td className="px-4 py-4 text-gray-500 italic" colSpan={3}>
+                <td className="px-4 py-4 italic text-gray-500" colSpan={3}>
                   No data found.
                 </td>
               </tr>
@@ -79,7 +79,7 @@ export default function ListPost({ postType }: ListPostProps) {
               data.map((item, index) => (
                 <tr
                   key={item.id}
-                  className="border-b hover:bg-gray-50 transition"
+                  className="transition border-b hover:bg-gray-50"
                 >
                   <td className="px-4 py-3">{index + 1}</td>
                   <td className="px-4 py-3">

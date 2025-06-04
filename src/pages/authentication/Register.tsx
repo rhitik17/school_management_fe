@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import useTokenStore, {
+import {
   useAuthStore,
   useEmailStore,
 } from "../../stores/tokenStore";
@@ -27,7 +27,6 @@ const Register = () => {
   const { email, setEmail } = useEmailStore();
   const [loading, setLoading] = useState(false);
   const router = useNavigate();
-  const { setToken } = useTokenStore();
   const { userData, setUserData } = useAuthStore();
 
   const {
@@ -83,10 +82,10 @@ const Register = () => {
   };
 
   return (
-    <div className="w-full h-screen flex items-center justify-center">
-      <div className="w-full max-w-lg bg-white rounded-xl shadow-lg p-6 sm:p-8 md:p-10 space-y-8">
+    <div className="flex items-center justify-center w-full h-screen">
+      <div className="w-full max-w-lg p-6 space-y-8 bg-white shadow-lg rounded-xl sm:p-8 md:p-10">
         {/* Welcome Section */}
-        <div className="w-full flex flex-col justify-center items-center gap-3">
+        <div className="flex flex-col items-center justify-center w-full gap-3">
           <h2 className="text-3xl font-semibold text-zinc-900">Register</h2>
           <p className="text-base text-gray-600">
             Sign up has never been this easy
@@ -96,7 +95,7 @@ const Register = () => {
         {/* Login Form */}
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="w-full flex flex-col gap-4 bg-white"
+          className="flex flex-col w-full gap-4 bg-white"
         >
           <Controller
             name="name"
@@ -171,7 +170,7 @@ const Register = () => {
           {/* Sign In Button */}
           <Button
             text="Get started"
-            className="h-11 w-full flex items-center text-center justify-center"
+            className="flex items-center justify-center w-full text-center h-11"
             disable={loading}
             loading={loading}
             variant="primary"
@@ -182,7 +181,7 @@ const Register = () => {
         {/* Footer */}
         <div className="text-sm text-gray-600">
           Already have an account?{" "}
-          <a href="/login" className="text-gray-800 font-semibold">
+          <a href="/login" className="font-semibold text-gray-800">
             Log in
           </a>
         </div>

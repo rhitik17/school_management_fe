@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import useTokenStore from "../../stores/tokenStore";
 
 const languages = {
@@ -19,7 +19,7 @@ const LanguageSwitcher: React.FC = () => {
 
   return (
     <div className=" flex items-center gap-3.5 ">
-      <div className="flex items-center gap-2 text-xs border-2 border-gray-200 rounded-lg p-1 ">
+      <div className="flex items-center gap-2 p-1 text-xs border-2 border-gray-200 rounded-lg ">
         {/* Nepali Language Option */}
         <span
           onClick={() => {

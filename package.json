@@ -11,6 +11,8 @@
     "tailwind": "tailwindcss init -p"
   },
   "dependencies": {
+    "@mui/icons-material": "^7.1.1",
+    "@react-spring/web": "^10.0.1",
     "axios": "^1.8.4",
     "framer-motion": "^12.5.0",
     "js-cookie": "^3.0.5",

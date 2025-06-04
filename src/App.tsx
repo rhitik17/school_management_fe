@@ -35,7 +35,7 @@ function App() {
         ))}
 
         {/* If the user is authenticated (token exists), allow access to private routes */}
-        {!userData?.access_token && (
+        {userData?.access_token && (
           <Route
             path="/*"
             element={

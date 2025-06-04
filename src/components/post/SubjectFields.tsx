@@ -1,4 +1,3 @@
-import React from "react";
 import { Controller } from "react-hook-form";
 import FormInput from "../common/FormInput";
 
@@ -25,7 +24,7 @@ const SubjectFields = ({ control }: { control: any }) => (
     </div>
 
     <div className="mt-4">
-      <label className="block font-medium mb-2">Subject Type</label>
+      <label className="block mb-2 font-medium">Subject Type</label>
       <div className="flex gap-6">
         <Controller
           name="type"

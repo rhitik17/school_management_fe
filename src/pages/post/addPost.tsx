@@ -1,5 +1,5 @@
 import React from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, } from "react-hook-form";
 import Button from "../../components/common/Button";
 import SchoolFields from "../../components/post/SchoolFields";
 import SessionFields from "../../components/post/SessionFields";
@@ -64,10 +64,10 @@ const AddPost: React.FC<AddPostProps> = ({ postType }) => {
   const showFull = ["students", "employees"];
 
   return (
-    <div className="w-full h-full flex flex-col items-center  py-12 bg-white ">
+    <div className="flex flex-col items-center w-full h-full py-12 bg-white ">
       {/* header */}
-      <div onClick={() => navigate(-1)} className=" w-full cursor-pointer">
-        <span className="w-fit rounded-full p-2 border border-gray-300 flex hover:scale-110 items-center justify-center">
+      <div onClick={() => navigate(-1)} className="w-full cursor-pointer ">
+        <span className="flex items-center justify-center p-2 border border-gray-300 rounded-full w-fit hover:scale-110">
           <Icons.AngleLeft className="size-5" />
         </span>
       </div>
@@ -76,7 +76,7 @@ const AddPost: React.FC<AddPostProps> = ({ postType }) => {
           showFull.includes(postType) ? "px-12" : "max-w-3xl"
         }`}
       >
-        <h1 className="text-xl font-semibold capitalize mb-4">
+        <h1 className="mb-4 text-xl font-semibold capitalize">
           Add {postType}
         </h1>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 ">

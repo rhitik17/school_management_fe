@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import useTokenStore, {
+import {
   useAuthStore,
   useEmailStore,
 } from "../../stores/tokenStore";
@@ -123,6 +123,7 @@ const OtpVerify = () => {
 
   const handlePaste = (
     e: React.ClipboardEvent<HTMLInputElement>,
+    // @ts-ignore
     index: number
   ) => {
     const pasteData = e.clipboardData.getData("text");
@@ -132,6 +133,8 @@ const OtpVerify = () => {
         ...prev,
         otp: newOtp,
       }));
+
+      // @ts-ignore
       newOtp.forEach((digit, index) => {
         document.getElementById(`otp-${index}`)?.focus();
       });
@@ -140,19 +143,19 @@ const OtpVerify = () => {
   };
 
   return (
-    <div className=" h-screen flex items-center justify-center bg-gray-100 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full max-w-xl  p-8 flex flex-col gap-8  bg-white rounded-lg">
-        <div className="flex flex-col mb-3 gap-2">
-          <h2 className="text-2xl text-center font-bold ">Check your email</h2>
+    <div className="flex items-center justify-center h-screen px-4 py-12 bg-gray-100 sm:px-6 lg:px-8">
+      <div className="flex flex-col w-full max-w-xl gap-8 p-8 bg-white rounded-lg">
+        <div className="flex flex-col gap-2 mb-3">
+          <h2 className="text-2xl font-bold text-center ">Check your email</h2>
           <p className="text-center">
             We sent a verfication link to
-            <p className="text-gray-600 font-semibold">{email}</p>
+            <p className="font-semibold text-gray-600">{email}</p>
           </p>
         </div>
         <div>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <div className="w-full flex justify-center space-x-2">
+              <div className="flex justify-center w-full space-x-2">
                 {formData.otp.map((otpValue, index) => (
                   <input
                     key={index}
@@ -162,7 +165,7 @@ const OtpVerify = () => {
                     maxLength={1}
                     autoComplete="off"
                     required
-                    className="w-16 h-16 text-center  border-red-600 text-4xl font-bold text-red-600 border-2 rounded-lg focus:outline-none"
+                    className="w-16 h-16 text-4xl font-bold text-center text-red-600 border-2 border-red-600 rounded-lg focus:outline-none"
                     value={otpValue}
                     onChange={(e) => handleChange(e, index)}
                     onKeyDown={(e) => handleKeyDown(e, index)}
@@ -172,13 +175,13 @@ const OtpVerify = () => {
               </div>
             </div>
             {error && (
-              <div className="text-red-500 text-sm flex justify-center items-center">
+              <div className="flex items-center justify-center text-sm text-red-500">
                 {error}
               </div>
             )}
             <button
               type="submit"
-              className="w-full flex items-center justify-center gap-2 bg-red-600 p-3 rounded-lg font-semibold text-white hover:bg-red-800 hover:scale-105  transition-all duration-200"
+              className="flex items-center justify-center w-full gap-2 p-3 font-semibold text-white transition-all duration-200 bg-red-600 rounded-lg hover:bg-red-800 hover:scale-105"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -205,7 +208,7 @@ const OtpVerify = () => {
               </button>
             </div>
 
-            <div className="text-sm text-gray-600 flex flex-row justify-center items-center gap-2">
+            <div className="flex flex-row items-center justify-center gap-2 text-sm text-gray-600">
               <a href="/login">
                 <Icons.ArrowRight className="rotate-180" />
               </a>

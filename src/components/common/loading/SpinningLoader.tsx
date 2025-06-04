@@ -1,15 +1,15 @@
-import React from "react";
+
 
 const SpinningLoader = () => {
   return (
     <div className="flex items-center justify-center">
       <div className="relative size-6">
         {/* Outer Circle */}
-        <div className="absolute inset-0 rounded-full border-2 "></div>
+        <div className="absolute inset-0 border-2 rounded-full "></div>
 
         {/* Animated Circle */}
         <div
-          className="absolute inset-0 rounded-full border-b-2  border-b-blue-700  animate-spin"
+          className="absolute inset-0 border-b-2 rounded-full border-b-blue-700 animate-spin"
           style={{
             animation: "spin 0.8s linear infinite",
           }}
@@ -17,7 +17,7 @@ const SpinningLoader = () => {
 
         {/* Inner Circle */}
         <div
-          className="absolute inset-1 rounded-full border border-b-blue-700 border-gray-100 animate-spin"
+          className="absolute border border-gray-100 rounded-full inset-1 border-b-blue-700 animate-spin"
           style={{
             animation: "spin 1s linear infinite",
           }}
@@ -32,7 +32,7 @@ export default SpinningLoader;
 export const SpinningLoader2 = () => {
   return (
     <svg
-      className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+      className="w-4 h-4 mr-2 -ml-1 text-white animate-spin"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
