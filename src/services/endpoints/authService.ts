@@ -7,7 +7,7 @@ interface LoginData {
 
 export const loginApi = async (formData: LoginData) => {
   try {
-    const response = await api.post("login", formData);
+    const response = await api.post("login/", formData);
     return response.data;
   } catch (error) {
     console.error("Error creating post:", error);
