@@ -3,7 +3,8 @@ import FormInput from "../common/FormInput";
 import CustomDropdown from "../common/CustomSelect";
 import { useCallback, useEffect, useState } from "react";
 import { listPost } from "../../services/endpoints/postApi";
-import { useAuthStore } from "../../stores/tokenStore";
+import { useAuthStore } from "../../stores/userStore";
+
 
 const SessionFields = ({ control }: any) => {
   const [schoolOptions, setSchoolOptions] = useState([]);
@@ -33,7 +34,7 @@ const SessionFields = ({ control }: any) => {
           name="schoolId"
           control={control}
           
-          defaultValue={userData?.user.schoolId}
+          defaultValue={userData?.id}
           render={({ field }) => (
             <CustomDropdown
               label="School Name"

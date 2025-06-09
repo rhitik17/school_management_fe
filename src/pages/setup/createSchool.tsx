@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import FormInput from "../../components/common/FormInput";
 import { toast } from "react-toastify";
 import { createSchool } from "../../services/endpoints/authService";
-import { useAuthStore } from "../../stores/tokenStore";
 import Button from "../../components/common/Button";
+import { useAuthStore } from "../../stores/userStore";
 
 interface SchoolFormData {
   schoolName: string;
@@ -13,6 +13,7 @@ interface SchoolFormData {
 
 const CreateSchool = () => {
   const navigate = useNavigate();
+  //@ts-ignore
   const { setUserData, userData } = useAuthStore();
 
   const {
@@ -32,13 +33,13 @@ const CreateSchool = () => {
       const response = await createSchool(data);
 
       toast.success(response.message);
-      setUserData({
-        ...userData,
-        user: {
-          ...userData?.user,
-          schoolId: response.data.id,
-        },
-      });
+      // setUserData({
+      //   ...userData,
+      //   user: {
+      //     ...userData?.user,
+      //     schoolId: response.data.id,
+      //   },
+      // });
       reset();
       navigate("/dashboard");
     } catch (error: any) {

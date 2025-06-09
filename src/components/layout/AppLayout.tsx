@@ -1,9 +1,9 @@
-import { useAuthStore } from "../../stores/tokenStore";
 import Footer from "../global/Footer";
 import Header from "../global/Header";
 import Sidebar from "../global/Sidebar";
 import Button from "../common/Button";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../stores/userStore";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { userData } = useAuthStore();
@@ -14,7 +14,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="flex h-screen w-screen bg-primary_bg ">
+    <div className="flex w-screen h-screen bg-primary_bg ">
       {/* Sidebar - Fixed Width */}
       <Sidebar />
 
@@ -23,13 +23,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <Header />
 
         {/* Page Content */}
-        <main className="flex-1 overflow-auto p-4 rounded-xl bg-white">
-          {!userData?.user?.schoolId && (
-            <div className="flex justify-between bg-secondary-300 items-center rounded-xl px-8 h-12">
+        <main className="flex-1 p-4 overflow-auto bg-white rounded-xl">
+          {!userData && (
+            <div className="flex items-center justify-between h-12 px-8 bg-secondary-300 rounded-xl">
               <h2>Please fill your school details</h2>
               <Button
                 text="Create School"
-                className="px-3 py-1 h-8"
+                className="h-8 px-3 py-1"
                 variant="primary"
                 action={handleCreateSchool}
               />

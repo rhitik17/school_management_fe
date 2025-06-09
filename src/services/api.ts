@@ -1,5 +1,5 @@
-import  { useAuthStore } from "../stores/tokenStore";
 import axios from "axios";
+import { useAuthStore } from "../stores/userStore";
 
 export const api = axios.create({
   baseURL: "https://smsbe-production.up.railway.app/api/v1/",

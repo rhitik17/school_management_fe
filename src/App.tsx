@@ -5,10 +5,10 @@ import {
   Navigate,
 } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { useAuthStore } from "./stores/tokenStore";
 import { privateRoutes } from "./routes/privateRoutes";
 import { publicRoutes } from "./routes/publicRoutes";
 import AppLayout from "./components/layout/AppLayout";
+import { useAuthStore } from "./stores/userStore";
 
 function App() {
 
@@ -35,7 +35,7 @@ function App() {
         ))}
 
         {/* If the user is authenticated (token exists), allow access to private routes */}
-        {userData?.access_token && (
+        {userData?.access && (
           <Route
             path="/*"
             element={
@@ -51,7 +51,7 @@ function App() {
         )}
 
         {/* If the user is NOT authenticated, redirect to login */}
-        {!userData?.access_token && <Route path="/*" element={<Navigate to="/login" />} />}
+        {!userData?.access && <Route path="/*" element={<Navigate to="/login" />} />}
       </Routes>
     </Router>
   );

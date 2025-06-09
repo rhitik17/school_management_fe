@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import LanguageSwitcher from "./LanguageSwitcher";
-import { useAuthStore } from "../../stores/tokenStore";
 import { Icons } from "../../assets/icons";
-import { logout } from "../../services/endpoints/authService";
 import { toast } from "react-toastify";
 import FormInput from "../common/FormInput";
 import Button from "../common/Button";
+import { useAuthStore } from "../../stores/userStore";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,7 +13,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   const { userData, setUserData, clearUserData } = useAuthStore();
-  const token = userData?.access_token;
+  const token = userData?.access;
 
   const handleClickOutside = useCallback((event: MouseEvent) => {
     if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -30,8 +28,8 @@ const Header = () => {
 
   const handleLogout = useCallback(async () => {
     try {
-      const response = await logout();
-      console.log(response);
+      // const response = await logout();
+      // console.log(response);
       toast.success("Logout Successfully!");
       setUserData(null);
       clearUserData();
@@ -99,7 +97,7 @@ const Header = () => {
               >
                 <div className="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full">
                   <span className="text-sm font-medium text-gray-600">
-                    {userData?.user?.email
+                    {userData?.email
                       ?.split("@")[0]
                       .slice(0, 2)
                       .toUpperCase()}
@@ -108,10 +106,10 @@ const Header = () => {
 
                 <div className="text-left">
                   <p className="text-sm font-medium text-gray-900">
-                    {userData?.user?.email}
+                    {userData?.email}
                   </p>
                   <p className="text-xs text-gray-500">
-                    {userData?.user?.role}
+                    {userData?.user_type}
                   </p>
                 </div>
               </button>

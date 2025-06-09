@@ -1,41 +1,28 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  forgetPassowrd,
-  resendOtp,
-} from "../../services/endpoints/authService";
+import { resetPassword } from "../../services/endpoints/authService";
 import { toast } from "react-toastify";
-import FormInput from "../../components/common/FormInput";
 import { Icons } from "../../assets/icons";
 import Button from "../../components/common/Button";
+import { useAuthStore } from "../../stores/userStore";
+import PasswordInput from "../../components/common/PasswordInput";
 
 interface OtpFormData {
-  otp: string[];
   password: string;
+  confirmPassword?: string;
 }
 
-const SetNewPassoword = () => {
+const SetNewPassword = () => {
   const [formData, setFormData] = useState<OtpFormData>({
-    otp: Array(6).fill(""),
     password: "",
+    confirmPassword: "",
   });
+
   const { input } = useParams();
-  const decodedInput =
-    typeof input === "string" ? decodeURIComponent(input) : "";
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<any>({});
-  const [resendTimer, setResendTimer] = useState(0);
-
-  const router = useNavigate();
-
-  useEffect(() => {
-    if (resendTimer > 0) {
-      const timerId = setInterval(() => {
-        setResendTimer((prev) => prev - 1);
-      }, 1000);
-      return () => clearInterval(timerId);
-    }
-  }, [resendTimer]);
+  const { userData, setUserData } = useAuthStore();
+  const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -45,202 +32,116 @@ const SetNewPassoword = () => {
     }));
   };
 
-  //to handle change for otp input
-  // @ts-ignore
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => {
-    const { value } = e.target;
-    setFormData((prev) => {
-      const updatedOtp = [...prev.otp];
-      updatedOtp[index] = value.slice(0, 1);
-      return { ...prev, otp: updatedOtp };
-    });
-
-    // Move focus to next input
-    if (value !== "" && index < formData.otp.length - 1) {
-      document.getElementById(`otp-${index + 1}`)?.focus();
-    }
-  };
-
-  // @ts-ignore
-  const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-    index: number
-  ) => {
-    if (e.key === "Backspace" && formData.otp[index] === "" && index > 0) {
-      document.getElementById(`otp-${index - 1}`)?.focus();
-    }
-  };
-
   const validateForm = () => {
-    const { password, otp } = formData;
-    let errors: any = {};
+    const { password, confirmPassword } = formData;
+    const newErrors: any = {};
 
-    // Validate Permanent Address
-    if (!password) errors.password = "Password is required.";
-    if (!otp || otp.some((otpValue) => otpValue === ""))
-      errors.otp = "OTP is required.";
+    if (!password) newErrors.password = "Password is required.";
+    if (!confirmPassword)
+      newErrors.confirmPassword = "Please confirm password.";
+    if (password && confirmPassword && password !== confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match.";
+    }
+    if (password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters.";
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      newErrors.password = "Password must include a special character.";
+    }
 
-    setErrors(errors);
-    return errors;
+    setErrors(newErrors);
+    return newErrors;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) return;
 
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
-    const otp = formData.otp.join("");
-
+    setLoading(true);
     try {
       const payload = {
-        input: decodedInput,
-        otp: otp,
+        user_id: Number(userData?.id),
+        otp_id: Number(input),
         password: formData.password,
       };
-      const response = await forgetPassowrd(payload);
 
-      if (response?.message) {
+      const response = await resetPassword(payload);
+      if (response) {
         toast.success(response.message);
-        router("/login");
+        setUserData(response);
+        navigate("/dashboard");
       }
     } catch (err: any) {
-      toast.error(
-        err?.message || "Failed to verify your details. Please try again."
-      );
+      toast.error(err?.message || "Failed to reset password.");
     } finally {
       setLoading(false);
     }
-
-    console.log(errors);
   };
 
-  //resend otp
-  // @ts-ignore
-  const handleResendCode = async () => {
-    try {
-      const payload = {
-        otp: decodedInput,
-      };
-      const response = await resendOtp(payload);
-      if (response?.message) {
-        toast.success(response.message);
-      }
-    } catch (err: any) {
-      toast.error(err?.message || "Failed to verify OTP. Please try again.");
-    }
-    setResendTimer(30);
-  };
-
-  // @ts-ignore
-  const handlePaste = (
-    e: React.ClipboardEvent<HTMLInputElement>,
-    // @ts-ignore
-    index: number
-  ) => {
-    const pasteData = e.clipboardData.getData("text");
-    if (/^\d{6}$/.test(pasteData)) {
-      const newOtp = pasteData.split("");
-      setFormData((prev) => ({
-        ...prev,
-        otp: newOtp,
-      }));
-
-      // @ts-ignore
-      newOtp.forEach((digit, index) => {
-        document.getElementById(`otp-${index}`)?.focus();
-      });
-    }
-    e.preventDefault();
-  };
+  const rules = [
+    "Must be at least 8 characters",
+    "Must contain one special character",
+  ];
 
   return (
-    <div className="flex items-center justify-center w-full ">
-      <div className="flex flex-col items-center justify-center w-full h-screen max-w-xl gap-8 ">
-        {/* Welcome Section */}
-        <div className="flex flex-col justify-center w-full gap-3 text-center ">
+    <div className="flex items-center justify-center w-full">
+      <div className="flex flex-col items-center justify-center w-full h-screen max-w-xl gap-8">
+        {/* Heading */}
+        <div className="w-full space-y-3 text-center">
           <h2 className="text-3xl font-semibold text-zinc-900">
-            Set new Password
+            Set New Password
           </h2>
           <p className="text-base text-gray-600">
-            Your new passowrd must be different from previous used passwords.
+            Your new password must be different from previous used passwords.
           </p>
         </div>
 
-        {/* Login Form */}
+        {/* Form */}
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col w-full gap-4 bg-white "
+          className="flex flex-col w-full gap-4 bg-white"
         >
-          <div className="flex flex-col gap-4">
-            <FormInput
-              label="Enter your OTP code"
-              name="otp"
-              type="text"
-              placeholder=""
-              onChange={handleInputChange}
-              InputClassName="h-11"
-              required={true}
-              error={errors?.otp}
-            />
-            <FormInput
-              label="Password"
-              name="password"
-              type="password"
-              placeholder=""
-              onChange={handleInputChange}
-              InputClassName="h-11"
-              required={true}
-              error={errors?.password}
-            />
-            <FormInput
-              label="Confirm Password"
-              name="confirmPassword"
-              type="password"
-              placeholder=""
-              onChange={handleInputChange}
-              InputClassName="h-11"
-              required={true}
-              error={errors?.confirmPassword}
-            />
-          </div>
+          <PasswordInput
+            label="Password"
+            name="password"
+         
+            placeholder=""
+            onChange={handleInputChange}
+            InputClassName="h-11"
+            required
+            error={errors?.password}
+          />
+          <PasswordInput
+            label="Confirm Password"
+            name="confirmPassword"
+         
+            placeholder=""
+            onChange={handleInputChange}
+            InputClassName="h-11"
+            required
+            error={errors?.confirmPassword}
+          />
 
-          <p className="flex flex-row items-center justify-start gap-2">
-            <FormInput
-              type="checkbox"
-              className="p-1 text-white bg-gray-300 rounded-full"
-            />
-            <span>Must be at least 8 characters</span>{" "}
-          </p>
-          <p className="flex flex-row items-center justify-start gap-2">
-            <FormInput
-              type="checkbox"
-              className="p-1 text-white bg-gray-300 rounded-full"
-            />{" "}
-            <span> Must contain one special character</span>
-          </p>
-
-          {/* otp resend */}
-          {/* <div className="flex items-center justify-end ">
-                        <div className="flex items-center justify-end w-full">
-                            <button
-                                type="button"
-                                className="text-sm text-red-600 hover:text-red-500"
-                                onClick={handleResendCode}
-                                disabled={resendTimer > 0}
-                            >
-                                Resend OTP{resendTimer > 0 && ` (${resendTimer}s)`}
-                            </button>
-                        </div>
-                    </div> */}
-
-          {/* Sign In Button */}
+          {/* Password rules */}
+          {rules.map((rule, index) => (
+            <p
+              key={index}
+              className="flex items-center gap-2 text-sm text-gray-600"
+            >
+              <input
+                type="checkbox"
+                readOnly
+                checked={
+                  rule.includes("8 characters")
+                    ? formData.password.length >= 8
+                    : /[!@#$%^&*(),.?":{}|<>]/.test(formData.password)
+                }
+                className="w-4 h-4"
+              />
+              <span>{rule}</span>
+            </p>
+          ))}
 
           <Button
             text="Reset Password"
@@ -253,15 +154,15 @@ const SetNewPassoword = () => {
         </form>
 
         {/* Footer */}
-        <div className="flex flex-row items-center justify-center gap-2 text-sm text-gray-600">
+        <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
           <a href="/login">
             <Icons.ArrowRight className="rotate-180" />
           </a>
-          <span className="font-semibold"> Back to Login</span>
+          <span className="font-semibold">Back to Login</span>
         </div>
       </div>
     </div>
   );
 };
 
-export default SetNewPassoword;
+export default SetNewPassword;

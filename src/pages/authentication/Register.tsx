@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
-  useAuthStore,
   useEmailStore,
 } from "../../stores/tokenStore";
 import { useNavigate } from "react-router-dom";
@@ -27,7 +26,8 @@ const Register = () => {
   const { email, setEmail } = useEmailStore();
   const [loading, setLoading] = useState(false);
   const router = useNavigate();
-  const { userData, setUserData } = useAuthStore();
+  // const {  setUserData, getUser } = useAuthStore();
+  // const userData = useAuthStore((state) => state.userData);
 
   const {
     control,
@@ -59,13 +59,13 @@ const Register = () => {
       setLoading(true);
       const response = await registerApi(data);
       setEmail(data.email);
-      setUserData({
-        ...userData,
-        user: {
-          ...userData?.user,
-          id: response.userId,
-        },
-      });
+      // setUserData({
+      //   ...userData,
+        
+          
+      //     id: response.userId,
+        
+      // });
       toast.success(response.message);
 
       router("/otp-verify");

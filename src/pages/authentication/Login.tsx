@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
-  useAuthStore,
+
   useEmailStore,
 } from "../../stores/tokenStore";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ import PasswordInput from "../../components/common/PasswordInput";
 import { loginApi } from "../../services/endpoints/authService";
 import { toast } from "react-toastify";
 import Button from "../../components/common/Button";
+import { useAuthStore } from "../../stores/userStore";
 
 interface LoginFormData {
   email: string;
@@ -46,7 +47,7 @@ const Login = () => {
 
       if (response) {
         toast.success(response.message);
-        setUserData(response.results);
+        setUserData(response);
         navigate("/dashboard");
       } else {
         toast.error(response.message || "Invalid response from server");

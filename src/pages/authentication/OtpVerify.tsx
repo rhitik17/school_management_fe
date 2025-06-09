@@ -1,17 +1,13 @@
 import { useEffect, useState } from "react";
 import {
-  useAuthStore,
-  useEmailStore,
-} from "../../stores/tokenStore";
-import {
   otpVerify,
   resendOtp,
-  verifyForgotPasswordOTP,
 } from "../../services/endpoints/authService";
 import { toast } from "react-toastify";
-import { SpinningLoader2 } from "../../components/common/loading/SpinningLoader";
 import { Icons } from "../../assets/icons";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAuthStore } from "../../stores/userStore";
+import Button from "../../components/common/Button";
 
 interface OtpFormData {
   otp: string[];
@@ -20,14 +16,14 @@ const OtpVerify = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState<OtpFormData>({
-    otp: Array(6).fill(""),
+    otp: Array(4).fill(""),
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [resendTimer, setResendTimer] = useState(0);
 
-  const { email } = useEmailStore();
   const { userData, setUserData } = useAuthStore();
+  const email = userData?.email;
 
   useEffect(() => {
     if (resendTimer > 0) {
@@ -77,26 +73,49 @@ const OtpVerify = () => {
 
     try {  
       const payload = {
-        userId: id || userData?.user?.id,
+        user_id: id || userData?.id,
         otp: otp,
       };
 
       if (id) {
-        response = await verifyForgotPasswordOTP(payload);
+        response = await otpVerify(payload);
+
+        if (response) {
+          setUserData(response.data);
+          toast.success(response.message);
+          setUserData({
+            id: id || null,
+            otp_verified: userData?.otp_verified ?? "",
+            user_type: userData?.user_type ?? null,
+            email: userData?.email ?? null,
+            permissions: userData?.permissions ?? [],
+            access: userData?.access ?? "",
+            refresh: userData?.refresh ?? "",
+          });
+          
+            navigate(`/set-password/${response.otp_id}`);
+      
+        }
+
+        
       } else {
         response = await otpVerify(payload);
+
+        if (response) {
+          setUserData(response.data);
+          toast.success(response.message);
+          setTimeout(() => {
+            navigate("/create-school");
+          }, 3000);
+        }
       }
       console.log("otp", response);
 
-      if (response) {
-        setUserData(response.data);
-        toast.success(response.message);
-        setTimeout(() => {
-          navigate("/create-school");
-        }, 3000);
-      }
+     
     } catch (err: any) {
-      setError(err?.message || "Failed to verify OTP. Please try again.");
+      const message = err?.response?.data?.detail || "Failed to verify OTP. Please try again."
+      toast.error(message)
+      setError(message);
     } finally {
       setIsLoading(false);
     }
@@ -108,7 +127,7 @@ const OtpVerify = () => {
   const handleResendCode = async () => {
     try {
       const payload = {
-        userId: userData?.access_token,
+        userId: userData?.id,
         otp: "",
       };
       const response = await resendOtp(payload);
@@ -165,7 +184,7 @@ const OtpVerify = () => {
                     maxLength={1}
                     autoComplete="off"
                     required
-                    className="w-16 h-16 text-4xl font-bold text-center text-red-600 border-2 border-red-600 rounded-lg focus:outline-none"
+                    className="w-16 h-16 text-4xl font-bold text-center border-2 rounded-lg border-primary-800 text-primary-700 focus:outline-none"
                     value={otpValue}
                     onChange={(e) => handleChange(e, index)}
                     onKeyDown={(e) => handleKeyDown(e, index)}
@@ -179,19 +198,16 @@ const OtpVerify = () => {
                 {error}
               </div>
             )}
-            <button
+            <Button
+            text="Verify OTP"
+            className="w-full"
               type="submit"
-              className="flex items-center justify-center w-full gap-2 p-3 font-semibold text-white transition-all duration-200 bg-red-600 rounded-lg hover:bg-red-800 hover:scale-105"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <SpinningLoader2 />
-                </>
-              ) : (
-                "Verify email"
-              )}
-            </button>
+              variant="primary"
+              
+              disable={isLoading}
+           / >
+         
+            
             <div className="flex items-center justify-center">
               <button
                 type="button"
