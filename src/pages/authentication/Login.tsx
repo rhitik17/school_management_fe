@@ -53,8 +53,8 @@ const Login = () => {
         toast.error(response.message || "Invalid response from server");
       }
     } catch (error: any) {
-      if (error.response?.data?.message) {
-        toast.error(error.response.data.message);
+      if (error.response?.data?.detail) {
+        toast.error(error.response.data.detail);
       } else {
         toast.error(error.message || "An error occurred");
       }
