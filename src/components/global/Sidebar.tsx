@@ -18,7 +18,7 @@ const navSections = [
       {
         name: "Sessions",
         icon: <Icons.Calender size={20} />,
-        path: "/sessions",
+        path: "/academic-sessions",
       },
       {
         name: "Classes",

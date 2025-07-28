@@ -2,8 +2,8 @@ import { Controller } from "react-hook-form";
 import FormInput from "../common/FormInput";
 
 const subjectTypes = [
-  { label: "Theory", value: "Theory" },
-  { label: "Practical", value: "Practical" },
+  { label: "Theory", value: "theory" },
+  { label: "Practical", value: "practical" },
 ];
 
 const SubjectFields = ({ control }: { control: any }) => (
@@ -27,9 +27,9 @@ const SubjectFields = ({ control }: { control: any }) => (
       <label className="block mb-2 font-medium">Subject Type</label>
       <div className="flex gap-6">
         <Controller
-          name="type"
+          name="subject_type"
           control={control}
-          defaultValue="Theory"
+          defaultValue="theory"
           render={({ field }) => (
             <>
               {subjectTypes.map((type) => (
@@ -51,7 +51,7 @@ const SubjectFields = ({ control }: { control: any }) => (
 
     <div className="mt-4">
       <Controller
-        name="code"
+        name="subject_code"
         control={control}
         defaultValue=""
         render={({ field }) => (

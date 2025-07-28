@@ -1,39 +1,38 @@
 import { Controller } from "react-hook-form";
 import FormInput from "../common/FormInput";
-import { useEffect, useState } from "react";
-import { listPost } from "../../services/endpoints/postApi";
+
 
 const ClassFields = ({ control }: any) => {
-  const [sections, setSections] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  // const [sections, setSections] = useState<any[]>([]);
+  // const [loading, setLoading] = useState(true);
 
-  const dummySections = [
-    { id: "dummy1", name: "Section A" },
-    { id: "dummy2", name: "Section B" },
-    { id: "dummy3", name: "Section C" },
-  ];
+  // const dummySections = [
+  //   { id: "dummy1", name: "Section A" },
+  //   { id: "dummy2", name: "Section B" },
+  //   { id: "dummy3", name: "Section C" },
+  // ];
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
-  const fetchData = async () => {
-    try {
-      const res = await listPost(`/sections`);
-      setSections(res.data || []);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setSections(dummySections);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const fetchData = async () => {
+  //   try {
+  //     const res = await listPost(`/sections`);
+  //     setSections(res.data || []);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //     setSections(dummySections);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <div className="space-y-4">
       {/* Class Name Field */}
       <Controller
-        name="className"
+        name="name"
         control={control}
         defaultValue=""
         render={({ field }) => (
@@ -41,8 +40,18 @@ const ClassFields = ({ control }: any) => {
         )}
       />
 
+      {/* description */}
+        <Controller
+        name="description"
+        control={control}
+        defaultValue=""
+        render={({ field }) => (
+          <FormInput label="Class Description" placeholder="Class Description" {...field} />
+        )}
+      />
+
       {/* Section Checkboxes */}
-      <Controller
+      {/* <Controller
         name="sectionIds"
         control={control}
         defaultValue={[]}
@@ -81,7 +90,7 @@ const ClassFields = ({ control }: any) => {
             </div>
           </div>
         )}
-      />
+      /> */}
     </div>
   );
 };

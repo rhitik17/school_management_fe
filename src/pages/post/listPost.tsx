@@ -1,12 +1,12 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../components/common/Button";
 import { Icons } from "../../assets/icons";
-import { listPost } from "../../services/endpoints/postApi";
+import { deletePost, listPost } from "../../services/endpoints/postApi";
 import { useNavigate } from "react-router-dom";
 import { PostType } from "../../types/postType";
 
 interface ListPostProps {
-  postType:PostType;
+  postType: PostType;
 }
 
 export default function ListPost({ postType }: ListPostProps) {
@@ -22,7 +22,7 @@ export default function ListPost({ postType }: ListPostProps) {
   const fetchData = async () => {
     try {
       const res = await listPost(`/${postType}`);
-      setData(res.data || []);
+      setData(res || []);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -35,10 +35,18 @@ export default function ListPost({ postType }: ListPostProps) {
     // Add your navigation or modal logic here
   };
 
-  const handleDelete = (id: string) => {
-    console.log("Delete", id);
-    // Add your delete logic here
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await deletePost(postType, id);
+      console.log(res)
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  console.log(data);
 
   return (
     <div className="p-6">
@@ -47,7 +55,11 @@ export default function ListPost({ postType }: ListPostProps) {
         <h1 className="text-2xl font-semibold text-gray-800 capitalize">
           {postType}
         </h1>
-        <Button variant="primary" text={`Add ${postType}`}  action={()=>navigate(`/${postType}/add`)}/>
+        <Button
+          variant="primary"
+          text={`Add ${postType}`}
+          action={() => navigate(`/${postType}/add`)}
+        />
       </div>
 
       {/* Table */}
@@ -56,9 +68,8 @@ export default function ListPost({ postType }: ListPostProps) {
           <thead className="text-left text-gray-600 bg-gray-100">
             <tr>
               <th className="px-4 py-3">#</th>
-              <th className="px-4 py-3 capitalize">
-                Title
-              </th>
+              <th className="px-4 py-3">ID</th>
+              <th className="px-4 py-3 capitalize">Title</th>
               <th className="px-4 py-3">Actions</th>
             </tr>
           </thead>
@@ -78,12 +89,14 @@ export default function ListPost({ postType }: ListPostProps) {
             ) : (
               data.map((item, index) => (
                 <tr
-                  key={item.id}
+                  key={index }
                   className="transition border-b hover:bg-gray-50"
                 >
-                  <td className="px-4 py-3">{index + 1}</td>
+                  <td className="px-4 py-3">{index+1}</td>
+
+                  <td className="px-4 py-3">{item.id}</td>
                   <td className="px-4 py-3">
-                    {postType === "schools" ? item.name : item.id|| "-"}
+                    {postType === "schools" ? item.name : item.name || "-"}
                   </td>
                   <td className="px-4 py-3 space-x-2">
                     <button

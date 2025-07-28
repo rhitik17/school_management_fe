@@ -12,8 +12,8 @@ export const privateRoutes = [
   //Academic Routes
   { path: ROUTES.ADD_SCHOOL, element: <AddPost postType="schools" /> },
   { path: ROUTES.LIST_SCHOOL, element: <ListPost postType="schools" /> },
-  { path: ROUTES.ADD_SESSION, element: <AddPost postType="sessions" /> },
-  { path: ROUTES.LIST_SESSION, element: <ListPost postType="sessions" /> },
+  { path: ROUTES.ADD_SESSION, element: <AddPost postType="academic-sessions" /> },
+  { path: ROUTES.LIST_SESSION, element: <ListPost postType="academic-sessions" /> },
   { path: ROUTES.ADD_CLASS, element: <AddPost postType="classes" /> },
   { path: ROUTES.LIST_CLASS, element: <ListPost postType="classes" /> },
   { path: ROUTES.ADD_SECTION, element: <AddPost postType="sections" /> },
