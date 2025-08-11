@@ -29,43 +29,37 @@ export const logout = async () => {
   }
 };
 
+// ------------------> Types <--------------------------
 export interface RegisterFormData {
-  name: string;
+  full_name: string;
   email: string;
   role: string;
   password: string;
-  school: {
-    name: string;
-    establishedYear: string;
-    schoolLogo: string;
-  };
 }
 
-//------------------> Register API <--------------------------
+// ------------------> Register API <--------------------------
 export const registerApi = async (formData: RegisterFormData) => {
   try {
-    const payload = {
-      email: formData.email,
-      password: formData.password,
-      role: "ADMIN",
-    };
-    const response = await api.post("auth/signup/", payload);
+  
+
+    const response = await api.post("auth/", formData);
     return response.data;
   } catch (error) {
-    console.error("Error creating post:", error);
+    console.error("Error creating user:", error);
     throw error;
   }
 };
 
+
 //------------------> OTP Verify API <--------------------------
 interface OtpData {
   otp: string;
-  userId?: string;
+
 }
 
 export const otpVerify = async (formData: OtpData) => {
   try {
-    const response = await api.post("auth/validate-otp/", formData);
+    const response = await api.post("auth/verify-otp/", formData);
     return response.data;
   } catch (error) {
     console.error("Error creating post:", error);
@@ -116,10 +110,25 @@ export const forgetPassowrd = async (formData: ForgetPasswordData) => {
   }
 };
 
+interface OtpData {
+  otp: string;
+  email:string | null;
+
+}
+
+export const verifyPasswordResetOtp = async (formData: OtpData) => {
+  try {
+    const response = await api.post("auth/verify-password-reset-otp/", formData);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating post:", error);
+    throw error;
+  }
+};
+
 interface ResetPasswordData {
-  user_id: number;
-  otp_id:number;
-  password:string;
+ email:string | null;
+  new_password:string;
 }
 
 export const resetPassword = async (payload: ResetPasswordData) => {
@@ -135,13 +144,3 @@ export const resetPassword = async (payload: ResetPasswordData) => {
 
 
 
-//------------------> Verify Forgot Password OTP API <--------------------------
-export const verifyForgotPasswordOTP = async (formData: OtpData) => {
-  try {
-    const response = await api.post("auth/verify-forgot-password-otp/", formData);
-    return response.data;
-  } catch (error) {
-    console.error("Error creating post:", error);
-    throw error;
-  }
-};

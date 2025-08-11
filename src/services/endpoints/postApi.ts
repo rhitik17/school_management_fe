@@ -3,7 +3,7 @@ import api from "../api";
 
 export const createPost = async (postType: any, data:any) => {
   try {
-    const response = await api.post(`${postType}`, data);
+    const response = await api.post(`${postType}/`, data);
     return response.data;
   } catch (error) {
     console.error("Error creating post:", error);
@@ -14,7 +14,17 @@ export const createPost = async (postType: any, data:any) => {
 
 export const listPost = async (postType: any) => {
   try {
-    const response = await api.get(`${postType}`);
+    const response = await api.get(`${postType}/`);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating post:", error);
+    throw error;
+  }
+};
+
+export const deletePost = async (postType: any, id:string) => {
+  try {
+    const response = await api.delete(`${postType}/${id}/`);
     return response.data;
   } catch (error) {
     console.error("Error creating post:", error);

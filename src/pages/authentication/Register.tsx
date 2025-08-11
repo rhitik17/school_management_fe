@@ -1,50 +1,45 @@
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import {
-  useEmailStore,
-} from "../../stores/tokenStore";
+import { useEmailStore } from "../../stores/tokenStore";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import {
-  registerApi,
-  RegisterFormData,
-} from "../../services/endpoints/authService";
+import { registerApi } from "../../services/endpoints/authService";
 import FormInput from "../../components/common/FormInput";
 import PasswordInput from "../../components/common/PasswordInput";
 import CustomDropdown from "../../components/common/CustomSelect";
 import Button from "../../components/common/Button";
 
 const roleOptions = [
-  { label: "Admin", value: "ADMIN" },
-  { label: "Super Admin", value: "SUPER_ADMIN" },
-  { label: "Teacher", value: "TEACHER" },
-  { label: "Accountant", value: "ACCOUNTANT" },
-  { label: "Reception", value: "RECEPTION" },
+  { label: "Admin", value: "admin" },
+  { label: "Super Admin", value: "super_admin" },
+  { label: "Teacher", value: "teacher" },
+  { label: "Accountant", value: "accountant" },
+  { label: "Reception", value: "reception" },
 ];
 
+interface RegisterForm {
+  full_name: string;
+  email: string;
+  password: string;
+  role: string;
+}
+
 const Register = () => {
-  const { email, setEmail } = useEmailStore();
+  const { email, setEmail, setPassword } = useEmailStore();
   const [loading, setLoading] = useState(false);
   const router = useNavigate();
-  // const {  setUserData, getUser } = useAuthStore();
-  // const userData = useAuthStore((state) => state.userData);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<RegisterFormData>({
+  } = useForm<RegisterForm>({
     defaultValues: {
-      name: "",
+      full_name: "",
       email: "",
-      role: "",
       password: "",
-      school: {
-        name: "",
-        establishedYear: "",
-        schoolLogo: "",
-      },
+      role: "",
     },
   });
 
@@ -54,28 +49,20 @@ const Register = () => {
     }
   }, [email, setValue]);
 
-  const onSubmit = async (data: RegisterFormData) => {
+  const onSubmit = async (data: RegisterForm) => {
     try {
       setLoading(true);
-      const response = await registerApi(data);
+      const response = await registerApi(data); // payload matches API
       setEmail(data.email);
-      // setUserData({
-      //   ...userData,
-        
-          
-      //     id: response.userId,
-        
-      // });
+      setPassword(data.password)
       toast.success(response.message);
-
       router("/otp-verify");
     } catch (error: any) {
       if (error.response && error.response.data) {
-        toast.error(error.response.data.message);
+        toast.error(error.response.data.detail || error.response.data.message);
       } else {
         toast.error("Something went wrong. Please try again.");
       }
-      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -92,25 +79,25 @@ const Register = () => {
           </p>
         </div>
 
-        {/* Login Form */}
+        {/* Form */}
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col w-full gap-4 bg-white"
         >
           <Controller
-            name="name"
+            name="full_name"
             control={control}
-            rules={{ required: "Name is required" }}
+            rules={{ required: "Full name is required" }}
             render={({ field }) => (
               <FormInput
-                label="Name"
+                label="Full Name"
                 type="text"
-                placeholder=""
+                placeholder="Enter your full name"
                 value={field.value}
                 onChange={field.onChange}
                 InputClassName="h-11"
-                required={true}
-                error={errors.name?.message}
+                required
+                error={errors.full_name?.message}
               />
             )}
           />
@@ -123,15 +110,16 @@ const Register = () => {
               <FormInput
                 label="Email"
                 type="email"
-                placeholder=""
+                placeholder="Enter your email"
                 value={field.value}
                 onChange={field.onChange}
                 InputClassName="h-11"
-                required={true}
+                required
                 error={errors.email?.message}
               />
             )}
           />
+
           <Controller
             name="password"
             control={control}
@@ -142,7 +130,7 @@ const Register = () => {
                 placeholder="*******"
                 onChange={field.onChange}
                 InputClassName="h-11"
-                required={true}
+                required
                 error={errors.password?.message}
               />
             )}
@@ -159,15 +147,13 @@ const Register = () => {
                 placeholder="Select Role"
                 value={field.value}
                 onChange={field.onChange}
-                className="h-11"
                 dropDownClass="w-full"
-                required={true}
+                required
                 error={errors.role?.message}
               />
             )}
           />
 
-          {/* Sign In Button */}
           <Button
             text="Get started"
             className="flex items-center justify-center w-full text-center h-11"

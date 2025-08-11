@@ -1,88 +1,69 @@
 import { Controller } from "react-hook-form";
 import FormInput from "../common/FormInput";
-import CustomDropdown from "../common/CustomSelect";
-import { useCallback, useEffect, useState } from "react";
-import { listPost } from "../../services/endpoints/postApi";
-import { useAuthStore } from "../../stores/userStore";
-
+// import { useAuthStore } from "../../stores/userStore";
 
 const SessionFields = ({ control }: any) => {
-  const [schoolOptions, setSchoolOptions] = useState([]);
-  const {userData} = useAuthStore();
-
-  const fetchSchool = useCallback(async () => {
-    try {
-      const res = await listPost("schools");
-      const formatOptions = res.data.map((item:any) => ({
-        value: item.id,
-        label: item.name,
-      }));
-      setSchoolOptions(formatOptions);
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchSchool();
-  }, []);
+  // const { userData } = useAuthStore();
 
   return (
     <>
-      <div className="hidden">
-        <Controller
-          name="schoolId"
-          control={control}
-          
-          defaultValue={userData?.id}
-          render={({ field }) => (
-            <CustomDropdown
-              label="School Name"
-              placeholder="Select School"
-              options={schoolOptions}
-             
-              dropDownClass="w-full"
-              {...field}
-            />
-          )}
-        />
-      </div>
+      {/* Session Name */}
       <div>
         <Controller
-          name="session"
+          name="name"
           control={control}
           defaultValue=""
           render={({ field }) => (
             <FormInput
               label="Session Name"
-              placeholder="Enter session Name"
+              placeholder="Enter session name"
               {...field}
             />
           )}
         />
       </div>
-      {/* 
+
+      {/* Start Date */}
       <div>
         <Controller
-          name="session"
+          name="start_date"
           control={control}
           defaultValue=""
           render={({ field }) => (
-            <FormInput label="Session" type="date" {...field} />
+            <FormInput label="Start Date" type="date" {...field} />
           )}
         />
-      </div> */}
+      </div>
 
-      {/* <div>
+      {/* End Date */}
+      <div>
         <Controller
-          name="endDate"
+          name="end_date"
           control={control}
           defaultValue=""
           render={({ field }) => (
             <FormInput label="End Date" type="date" {...field} />
           )}
         />
-      </div> */}
+      </div>
+
+      {/* Is Current Session */}
+      <div className="flex items-center gap-2 mt-2">
+        <Controller
+          name="is_current"
+          control={control}
+          defaultValue={false}
+          render={({ field }) => (
+            <input
+              type="checkbox"
+              checked={field.value}
+              onChange={(e) => field.onChange(e.target.checked)}
+              className="w-4 h-4"
+            />
+          )}
+        />
+        <label className="text-sm text-gray-700">Is Current Session</label>
+      </div>
     </>
   );
 };

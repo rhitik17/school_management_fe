@@ -36,7 +36,11 @@ const AddPost: React.FC<AddPostProps> = ({ postType }) => {
       reset();
     } catch (error: any) {
       console.error("Error:", error);
-      toast.error(error?.message);
+      const message =
+    error?.response?.data?.detail ||
+    error?.message ||
+    "An error occurred. Please try again.";
+  toast.error(message || error?.message);
     }
   };
 
@@ -44,7 +48,7 @@ const AddPost: React.FC<AddPostProps> = ({ postType }) => {
     switch (postType) {
       case "schools":
         return <SchoolFields control={control} />;
-      case "sessions":
+      case "academic-sessions":
         return <SessionFields control={control} />;
       case "classes":
         return <ClassFields control={control} />;

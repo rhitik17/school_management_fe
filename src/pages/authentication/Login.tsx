@@ -18,7 +18,7 @@ interface LoginFormData {
 }
 
 const Login = () => {
-  const { email } = useEmailStore();
+  const { email, password } = useEmailStore();
   const navigate = useNavigate();
   const {setUserData } = useAuthStore();
 
@@ -29,8 +29,8 @@ const Login = () => {
     setValue,
   } = useForm<LoginFormData>({
     defaultValues: {
-      email: "",
-      password: "",
+      email:email || "",
+      password: password ||"",
     },
   });
 
@@ -47,7 +47,7 @@ const Login = () => {
 
       if (response) {
         toast.success(response.message);
-        setUserData(response);
+        setUserData(response.data);
         navigate("/dashboard");
       } else {
         toast.error(response.message || "Invalid response from server");

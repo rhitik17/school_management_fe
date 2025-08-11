@@ -1,1 +1,1 @@
-export type PostType = "schools" | "sessions" | "sections" | "classes" | "employees" | "students" | "subjects";
+export type PostType = "schools" | "academic-sessions" | "sections" | "classes" | "employees" | "students" | "subjects";

@@ -115,10 +115,15 @@ export default useTokenStore;
 
 interface EmailState {
   email: string | null;
+  password:string | null;
   setEmail: (email: string | null) => void;
+  setPassword: (password: string | null) => void;
+
 }
 
 export const useEmailStore = create<EmailState>((set) => ({
   email: null,
   setEmail: (email: string | null) => set({ email }),
+    password: null,
+  setPassword: (password: string | null) => set({ password }),
 }));

@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, } from "react-router-dom";
 import { resetPassword } from "../../services/endpoints/authService";
 import { toast } from "react-toastify";
 import { Icons } from "../../assets/icons";
 import Button from "../../components/common/Button";
-import { useAuthStore } from "../../stores/userStore";
 import PasswordInput from "../../components/common/PasswordInput";
+import { useEmailStore } from "../../stores/tokenStore";
 
 interface OtpFormData {
   password: string;
@@ -17,11 +17,9 @@ const SetNewPassword = () => {
     password: "",
     confirmPassword: "",
   });
-
-  const { input } = useParams();
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<any>({});
-  const { userData, setUserData } = useAuthStore();
+  const { email, setPassword } = useEmailStore();
   const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,20 +55,18 @@ const SetNewPassword = () => {
     e.preventDefault();
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) return;
-
+    setPassword(formData.password);
     setLoading(true);
     try {
       const payload = {
-        user_id: Number(userData?.id),
-        otp_id: Number(input),
-        password: formData.password,
+        email: email,
+        new_password: formData.password,
       };
 
       const response = await resetPassword(payload);
       if (response) {
         toast.success(response.message);
-        setUserData(response);
-        navigate("/dashboard");
+        navigate("/login");
       }
     } catch (err: any) {
       toast.error(err?.message || "Failed to reset password.");
@@ -105,7 +101,6 @@ const SetNewPassword = () => {
           <PasswordInput
             label="Password"
             name="password"
-         
             placeholder=""
             onChange={handleInputChange}
             InputClassName="h-11"
@@ -115,7 +110,6 @@ const SetNewPassword = () => {
           <PasswordInput
             label="Confirm Password"
             name="confirmPassword"
-         
             placeholder=""
             onChange={handleInputChange}
             InputClassName="h-11"
