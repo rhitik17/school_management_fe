@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { Icons } from "../../assets/icons";
 import Button from "../../components/common/Button";
 import { useAuthStore } from "../../stores/userStore";
+import { useEmailStore } from "../../stores/tokenStore";
 
 const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
@@ -17,6 +18,7 @@ const ForgotPassword = () => {
 
   //@ts-ignore
   const { userData, setUserData } = useAuthStore();
+  const { setEmail} = useEmailStore();
 
   const router = useNavigate();
 
@@ -46,23 +48,14 @@ const ForgotPassword = () => {
       setErrors(validationErrors);
       return;
     }
+    setEmail(formData.input);
 
     try {
       setLoading(true);
       const response = await forgetPassowrd(formData);
 
       toast.success(response?.data?.message);
-
-      // setUserData({
-      //   id: response.User_id || null,
-      //   otp_verified: userData?.otp_verified ?? "",
-      //   user_type: userData?.user_type ?? null,
-      //   email: userData?.email ?? null,
-      //   permissions: userData?.permissions ?? [],
-      //   access: userData?.access ?? null,
-      //   refresh: userData?.refresh ?? null,
-      // });
-      router(`/otp-verify/${response?.user_id}`);
+      router(`/otp-verify`);
     } catch (error: any) {
       const message =
         error?.response?.data?.detail || "An error occurred. Please try again.";

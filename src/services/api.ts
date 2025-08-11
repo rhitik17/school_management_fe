@@ -2,7 +2,7 @@ import axios from "axios";
 import { useAuthStore } from "../stores/userStore";
 
 export const api = axios.create({
-  baseURL: "https://smsbe-production.up.railway.app/api/v1/",
+  baseURL: "https://school-management-production-394e.up.railway.app/api/v1/",
   // baseURL: "https://worthwhile-siusan-visionsapi-a12554b9.koyeb.app/api/v1/",
 });
 
