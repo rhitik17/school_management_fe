@@ -4,13 +4,26 @@ import { Icons } from "../../assets/icons";
 import { deletePost, listPost } from "../../services/endpoints/postApi";
 import { useNavigate } from "react-router-dom";
 import { PostType } from "../../types/postType";
+import Pagination from "../../components/common/Pagination";
 
 interface ListPostProps {
   postType: PostType;
 }
 
+interface PaginationProps {
+  count:number;
+  page:number;
+  pages:number
+  previous:string;
+  next:string;
+  size:number;
+}
+
 export default function ListPost({ postType }: ListPostProps) {
   const [data, setData] = useState<any[]>([]);
+  const [pagination, setPagination] = useState<PaginationProps>();
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -22,7 +35,8 @@ export default function ListPost({ postType }: ListPostProps) {
   const fetchData = async () => {
     try {
       const res = await listPost(`/${postType}`);
-      setData(res || []);
+      setData(res.results || []);
+      setPagination(res.pagination);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -38,7 +52,7 @@ export default function ListPost({ postType }: ListPostProps) {
   const handleDelete = async (id: string) => {
     try {
       const res = await deletePost(postType, id);
-      console.log(res)
+      console.log(res);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -87,12 +101,12 @@ export default function ListPost({ postType }: ListPostProps) {
                 </td>
               </tr>
             ) : (
-              data.map((item, index) => (
+              data?.map((item, index) => (
                 <tr
-                  key={index }
+                  key={index}
                   className="transition border-b hover:bg-gray-50"
                 >
-                  <td className="px-4 py-3">{index+1}</td>
+                  <td className="px-4 py-3">{index + 1}</td>
 
                   <td className="px-4 py-3">{item.id}</td>
                   <td className="px-4 py-3">
@@ -117,6 +131,15 @@ export default function ListPost({ postType }: ListPostProps) {
             )}
           </tbody>
         </table>
+        <Pagination
+         limit = {limit}
+  setLimit = {setLimit}
+  page={page }
+  setPage = {setPage}
+  total = {pagination?.size || 0}
+  loading= {loading}
+        
+        />
       </div>
     </div>
   );
