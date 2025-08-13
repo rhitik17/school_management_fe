@@ -3,16 +3,15 @@ import FormInput from "../common/FormInput";
 import { useEffect, useState } from "react";
 import { listPost } from "../../services/endpoints/postApi";
 
-
 const ClassFields = ({ control }: any) => {
   const [sections, setSections] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const dummySections = [
-    { id: "A", name: "Section A" },
-    { id: "B", name: "Section B" },
-    { id: "C", name: "Section C" },
-  ];
+  // const dummySections = [
+  //   { id: "A", name: "Section A" },
+  //   { id: "B", name: "Section B" },
+  //   { id: "C", name: "Section C" },
+  // ];
 
   useEffect(() => {
     fetchData();
@@ -21,10 +20,9 @@ const ClassFields = ({ control }: any) => {
   const fetchData = async () => {
     try {
       const res = await listPost(`sections`);
-      setSections(res?.results || dummySections);
+      setSections(res?.data.results || []);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setSections(dummySections);
     } finally {
       setLoading(false);
     }
@@ -43,18 +41,22 @@ const ClassFields = ({ control }: any) => {
       />
 
       {/* description */}
-        <Controller
+      <Controller
         name="description"
         control={control}
         defaultValue=""
         render={({ field }) => (
-          <FormInput label="Class Description" placeholder="Class Description" {...field} />
+          <FormInput
+            label="Class Description"
+            placeholder="Class Description"
+            {...field}
+          />
         )}
       />
 
       {/* Section Checkboxes */}
       <Controller
-        name="sectionIds"
+        name="section_ids"
         control={control}
         defaultValue={[]}
         render={({ field }) => (

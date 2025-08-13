@@ -6,13 +6,27 @@ const SectionFields = ({ control }: any) => {
     <>
       <div>
         <Controller
-          name="section"
+          name="name"
           control={control}
           defaultValue=""
           render={({ field }) => (
             <FormInput
               label="Section Name"
               placeholder="Enter section name"
+              {...field}
+            />
+          )}
+        />
+      </div>
+         <div>
+        <Controller
+          name="description"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <FormInput
+              label="Section Description"
+              placeholder="Enter section description"
               {...field}
             />
           )}

@@ -35,8 +35,8 @@ export default function ListPost({ postType }: ListPostProps) {
   const fetchData = async () => {
     try {
       const res = await listPost(`/${postType}`);
-      setData(res.results || []);
-      setPagination(res.pagination);
+      setData(res.data.results || []);
+      setPagination(res.data.pagination);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
