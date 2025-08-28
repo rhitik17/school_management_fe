@@ -1,5 +1,5 @@
 import React from "react";
-import { useForm, } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import Button from "../../components/common/Button";
 import SchoolFields from "../../components/post/SchoolFields";
 import SessionFields from "../../components/post/SessionFields";
@@ -13,6 +13,7 @@ import { PostType } from "../../types/postType";
 import EmployeeFields from "../../components/post/EmployeeFields";
 import StudentFields from "../../components/post/StudentFields";
 import SubjectFields from "../../components/post/SubjectFields";
+import SubjectGroupFields from "../../components/post/subjectGroupFields";
 
 interface AddPostProps {
   postType: PostType;
@@ -21,12 +22,41 @@ interface AddPostProps {
 const AddPost: React.FC<AddPostProps> = ({ postType }) => {
   const navigate = useNavigate();
 
+  // dynamic default values depending on postType
+  const getDefaultValues = () => {
+    switch (postType) {
+      case "subject-groups":
+        return {
+          name: "",
+          class_instance: undefined,
+          description: "",
+          section_ids: [],
+          subject_teacher_mappings: [
+            { subject: undefined, teacher: undefined },
+          ],
+        };
+      case "classes":
+        return { name: "", description: "", section_ids: undefined };
+      case "subjects":
+        return { name: "", subject_type: undefined, subject_code: undefined };
+      case "sections":
+        return { name: "", description: "" };
+      // add others as needed
+      default:
+        return {};
+    }
+  };
+
   const {
     handleSubmit,
     control,
     reset,
+    watch,
+    setValue,
     formState: { isSubmitting },
-  } = useForm();
+  } = useForm({
+    defaultValues: getDefaultValues(),
+  });
 
   const onSubmit = async (data: any) => {
     try {
@@ -37,10 +67,10 @@ const AddPost: React.FC<AddPostProps> = ({ postType }) => {
     } catch (error: any) {
       console.error("Error:", error);
       const message =
-    error?.response?.data?.detail ||
-    error?.message ||
-    "An error occurred. Please try again.";
-  toast.error(message || error?.message);
+        error?.response?.data?.detail ||
+        error?.message ||
+        "An error occurred. Please try again.";
+      toast.error(message || error?.message);
     }
   };
 
@@ -56,6 +86,14 @@ const AddPost: React.FC<AddPostProps> = ({ postType }) => {
         return <SectionFields control={control} />;
       case "subjects":
         return <SubjectFields control={control} />;
+      case "subject-groups":
+        return (
+          <SubjectGroupFields
+            control={control}
+            watch={watch}
+            setValue={setValue}
+          />
+        );
       case "employees":
         return <EmployeeFields control={control} />;
       case "students":
@@ -65,7 +103,7 @@ const AddPost: React.FC<AddPostProps> = ({ postType }) => {
     }
   };
 
-  const showFull = ["students", "employees"];
+  const showFull = ["students", "employees", ""];
 
   return (
     <div className="flex flex-col items-center w-full h-full py-12 bg-white ">

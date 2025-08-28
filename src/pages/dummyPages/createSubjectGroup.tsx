@@ -1,89 +1,113 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import FormInput from "../components/common/FormInput";
-import CustomDropdown from "../components/common/CustomSelect";
-import Button from "../components/common/Button";
-
+import FormInput from "../../components/common/FormInput";
+import CustomDropdown from "../../components/common/CustomSelect";
+import Button from "../../components/common/Button";
+import { createPost, listPost } from "../../services/endpoints/postApi";
+import { ClassItem } from "../../types/commonTypes";
+import { toast } from "react-toastify";
 
 const CreateSubjectGroup = () => {
-  const { control, handleSubmit, watch, setValue,  } = useForm({
+  const { control, handleSubmit, watch, setValue, reset } = useForm({
     defaultValues: {
       name: "",
-      classId: "",
+      classId: undefined,
       sectionIds: [],
-      subjectTeachers: [{ subjectId: "", teacherId: "" }],
+      subjectTeachers: [{ subjectId: undefined, teacherId: undefined }],
     },
   });
 
-  // Dropdown options
-  // @ts-ignore
+  // State
+  const [classes, setClasses] = useState<ClassItem[]>([]);
   const [classOptions, setClassOptions] = useState<
     { value: string; label: string }[]
   >([]);
   const [sectionOptions, setSectionOptions] = useState<
     { value: string; label: string }[]
   >([]);
-  // @ts-ignore
   const [subjectOptions, setSubjectOptions] = useState<
     { value: string; label: string }[]
   >([]);
-  // @ts-ignore
   const [teacherOptions, setTeacherOptions] = useState<
     { value: string; label: string }[]
   >([]);
   const [loadingSections, setLoadingSections] = useState(false);
 
-  // Dummy data for development/demo
-  const dummyClasses = [
-    { value: "1", label: "Class 1" },
-    { value: "2", label: "Class 2" },
-    { value: "3", label: "Class 3" },
-  ];
-  const dummySections = [
-    { value: "A", label: "Section A" },
-    { value: "B", label: "Section B" },
-    { value: "C", label: "Section C" },
-  ];
-  const dummySubjects = [
-    { value: "s1", label: "Mathematics" },
-    { value: "s2", label: "Science" },
-    { value: "s3", label: "English" },
-  ];
-  const dummyTeachers = [
-    { value: "t1", label: "Mr. Smith" },
-    { value: "t2", label: "Ms. Johnson" },
-    { value: "t3", label: "Mrs. Lee" },
-  ];
-
-  // Always use dummy data for development/demo
-  useEffect(() => {
-    setClassOptions(dummyClasses);
-    setSubjectOptions(dummySubjects);
-    setTeacherOptions(dummyTeachers);
-  }, []);
-
-  // Set sections to dummy on class change
   const selectedClassId = watch("classId");
-  useEffect(() => {
-    if (!selectedClassId) {
-      setSectionOptions([]);
-      setValue("sectionIds", []);
-      return;
-    }
-    setLoadingSections(true);
-    setTimeout(() => {
-      setSectionOptions(dummySections);
-      setLoadingSections(false);
-    }, 300); // simulate loading
-  }, [selectedClassId, setValue]);
-
-  // Subject-Teacher dynamic rows
   const subjectTeachers = watch("subjectTeachers");
 
+  // Only fetch classes initially
+  useEffect(() => {
+    const fetchClasses = async () => {
+      try {
+        const res = await listPost(`classes`);
+        setClasses(res?.data.results);
+        setClassOptions(
+          (res?.data?.results || []).map((item: any) => ({
+            value: item.id,
+            label: item.name,
+          }))
+        );
+      } catch (error) {
+        console.error("Error fetching classes:", error);
+      }
+    };
+    fetchClasses();
+  }, []);
+
+  // Fetch subjects/teachers only when needed
+  useEffect(() => {
+    if (subjectTeachers.length > 0) {
+      const fetchData = async () => {
+        try {
+          const [subjectsRes, teachersRes] = await Promise.all([
+            listPost("subjects"),
+            listPost("teachers"),
+          ]);
+          setSubjectOptions(
+            (subjectsRes?.data?.results || []).map((item: any) => ({
+              value: item.id,
+              label: item.name,
+            }))
+          );
+          setTeacherOptions(
+            (teachersRes?.data?.results || []).map((item: any) => ({
+              value: item.id,
+              label: item.name,
+            }))
+          );
+        } catch (error) {
+          console.error("Error fetching subjects/teachers:", error);
+        }
+      };
+      fetchData();
+    }
+  }, [classes]);
+
+  // Update section options when classId changes
+  useEffect(() => {
+    if (selectedClassId) {
+      setLoadingSections(true);
+      const selectedClass = classes.find((cls) => cls.id === selectedClassId);
+      if (selectedClass) {
+        setSectionOptions(
+          (selectedClass.sections || []).map((section: any) => ({
+            value: section.id,
+            label: section.name,
+          }))
+        );
+      }
+      setTimeout(() => setLoadingSections(false), 300);
+    } else {
+      setSectionOptions([]);
+    }
+  }, [selectedClassId, classes]);
+
+  // Add/remove subject-teacher rows
   const addSubjectTeacher = () => {
     setValue("subjectTeachers", [
       ...subjectTeachers,
-      { subjectId: "", teacherId: "" },
+      { subjectId: undefined, teacherId: undefined },
     ]);
   };
 
@@ -92,9 +116,30 @@ const CreateSubjectGroup = () => {
     setValue("subjectTeachers", updated);
   };
 
-  const onSubmit = (data: any) => {
-    // Handle form submission
-    console.log("Form Data:", data);
+  // Submit
+  const onSubmit = async (data: any) => {
+    try {
+      const payload = {
+        name: data.name,
+        class_instance: data.classId,
+        description: data.description,
+        section_ids: data.sectionIds,
+        subject_teacher_mappings: data.subjectTeachers.map((st: any) => ({
+          subject: st.subjectId,
+          teacher: st.teacherId,
+        })),
+      };
+      const res = await createPost(`subject-groups`, payload);
+      toast.success(res.message);
+      reset();
+    } catch (error: any) {
+      console.error("Error:", error);
+      const message =
+        error?.response?.data?.detail ||
+        error?.message ||
+        "An error occurred. Please try again.";
+      toast.error(message);
+    }
   };
 
   return (
@@ -125,7 +170,7 @@ const CreateSubjectGroup = () => {
           render={({ field, fieldState }) => (
             <CustomDropdown
               label="Class"
-              options={dummyClasses}
+              options={classOptions}
               placeholder="Select Class"
               value={field.value}
               onChange={field.onChange}
@@ -192,8 +237,7 @@ const CreateSubjectGroup = () => {
           </label>
 
           <div className="space-y-3">
-            {/* @ts-ignore */}
-            {subjectTeachers.map((row: any, idx: number) => (
+            {subjectTeachers.map((_: any, idx: number) => (
               <div key={idx} className="flex items-center gap-4">
                 <Controller
                   name={`subjectTeachers.${idx}.subjectId`}
@@ -202,12 +246,12 @@ const CreateSubjectGroup = () => {
                   render={({ field, fieldState }) => (
                     <CustomDropdown
                       label="Subject"
-                      options={dummySubjects}
+                      options={subjectOptions}
                       placeholder="Select Subject"
                       value={field.value}
                       onChange={field.onChange}
                       error={fieldState.error?.message}
-                      dropDownClass="w-48"
+                      dropDownClass="w-full"
                       required
                     />
                   )}
@@ -219,12 +263,12 @@ const CreateSubjectGroup = () => {
                   render={({ field, fieldState }) => (
                     <CustomDropdown
                       label="Teacher"
-                      options={dummyTeachers}
+                      options={teacherOptions}
                       placeholder="Select Teacher"
                       value={field.value}
                       onChange={field.onChange}
                       error={fieldState.error?.message}
-                      dropDownClass="w-48"
+                      dropDownClass="w-full"
                       required
                     />
                   )}
@@ -242,7 +286,7 @@ const CreateSubjectGroup = () => {
             ))}
           </div>
 
-          {/* add field button */}
+          {/* Add field button */}
           <div className="flex justify-end">
             <Button
               text="Add +"

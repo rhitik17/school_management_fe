@@ -20,6 +20,8 @@ const ROUTES = {
   ADD_SECTION: "/sections/add",
   LIST_SUBJECT: "/subjects",
   ADD_SUBJECT: "/subjects/add",
+  LIST_SUBJECT_GROUP: "/subject-groups",
+  ADD_SUBJECT_GROUP: "/subject-groups/add",
   LIST_STUDENT: "/students",
   ADD_STUDENT: "/students/add",
   LIST_EMPLOYEE: "/employees",

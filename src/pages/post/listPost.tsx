@@ -11,12 +11,12 @@ interface ListPostProps {
 }
 
 interface PaginationProps {
-  count:number;
-  page:number;
-  pages:number
-  previous:string;
-  next:string;
-  size:number;
+  count: number;
+  page: number;
+  pages: number;
+  previous: string;
+  next: string;
+  size: number;
 }
 
 export default function ListPost({ postType }: ListPostProps) {
@@ -59,8 +59,6 @@ export default function ListPost({ postType }: ListPostProps) {
       setLoading(false);
     }
   };
-
-  console.log(data);
 
   return (
     <div className="p-6">
@@ -132,13 +130,12 @@ export default function ListPost({ postType }: ListPostProps) {
           </tbody>
         </table>
         <Pagination
-         limit = {limit}
-  setLimit = {setLimit}
-  page={page }
-  setPage = {setPage}
-  total = {pagination?.size || 0}
-  loading= {loading}
-        
+          limit={limit}
+          setLimit={setLimit}
+          page={page}
+          setPage={setPage}
+          total={pagination?.size || 0}
+          loading={loading}
         />
       </div>
     </div>
