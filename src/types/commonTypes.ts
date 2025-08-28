@@ -34,3 +34,14 @@ export interface ClassListData {
   pagination: Pagination;
   results: ClassItem[];
 }
+
+
+//session Types
+export interface Session {
+  id: number;
+  name: string;
+  start_date: string;
+  end_date: string;
+  school: number;
+  is_current: boolean;
+}

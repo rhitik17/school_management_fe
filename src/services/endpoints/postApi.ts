@@ -32,3 +32,16 @@ export const deletePost = async (postType: any, id:string) => {
     throw error;
   }
 };
+
+
+// ==> Switch Academic Sessions
+
+export const switchSession = async ( data:any) => {
+  try {
+    const response = await api.post(`/switch-academic-session/`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating post:", error);
+    throw error;
+  }
+};

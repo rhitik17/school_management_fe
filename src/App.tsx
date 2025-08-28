@@ -9,10 +9,24 @@ import { privateRoutes } from "./routes/privateRoutes";
 import { publicRoutes } from "./routes/publicRoutes";
 import AppLayout from "./components/layout/AppLayout";
 import { useAuthStore } from "./stores/userStore";
+import { useEffect, useState } from "react";
+import LoadingPage from "./components/common/loading/LoadingPage";
 
 function App() {
+  const { userData } = useAuthStore();
 
-  const {userData} = useAuthStore();
+   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading time (e.g., API fetch)
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) return <LoadingPage />;
 
   return (
     <Router>
@@ -51,7 +65,9 @@ function App() {
         )}
 
         {/* If the user is NOT authenticated, redirect to login */}
-        {!userData?.access && <Route path="/*" element={<Navigate to="/login" />} />}
+        {!userData?.access && (
+          <Route path="/*" element={<Navigate to="/login" />} />
+        )}
       </Routes>
     </Router>
   );
