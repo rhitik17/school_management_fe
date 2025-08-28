@@ -36,9 +36,9 @@ const navSections = [
         path: "/subjects",
       },
       {
-        name: "Create Subject Group",
+        name: "Subject Groups",
         icon: <Icons.Calender size={20} />,
-        path: "/create-subject-group",
+        path: "/subject-groups",
       },
       {
         name: "Assign Class Teacher",

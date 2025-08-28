@@ -1,7 +1,8 @@
+import { PostType } from "../../types/postType";
 import api from "../api";
 
 
-export const createPost = async (postType: any, data:any) => {
+export const createPost = async (postType: PostType, data:any) => {
   try {
     const response = await api.post(`${postType}/`, data);
     return response.data;

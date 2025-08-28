@@ -7,11 +7,6 @@ const ClassFields = ({ control }: any) => {
   const [sections, setSections] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // const dummySections = [
-  //   { id: "A", name: "Section A" },
-  //   { id: "B", name: "Section B" },
-  //   { id: "C", name: "Section C" },
-  // ];
 
   useEffect(() => {
     fetchData();
