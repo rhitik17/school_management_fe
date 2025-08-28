@@ -1,6 +1,7 @@
 import { create } from "zustand";
 //@ts-ignore
 import Cookies from "js-cookie";
+import { Session } from "../types/commonTypes";
 
 // Cookie name
 const AUTH_COOKIE_NAME = "auth_data";
@@ -12,13 +13,15 @@ interface UserData {
   user_type: string | null;
   email: string | null;
   permissions: string[] | null;
-  access: string ;
-  refresh: string ;
+  access: string;
+  refresh: string;
+  active_session:Session | null;
 }
 
 interface UserStore {
   userData: UserData | null;
   setUserData: (data: UserData | null) => void;
+  setActiveSession: (session: Session | null) => void;
   clearUserData: () => void;
   getAccessToken: () => string | undefined;
   getRefreshToken: () => string | undefined;
@@ -27,16 +30,31 @@ interface UserStore {
 }
 
 export const useAuthStore = create<UserStore>()((set, get) => ({
-
-    
-  userData: Cookies.get(AUTH_COOKIE_NAME) &&  Cookies.get(AUTH_COOKIE_NAME) !== "undefined"
-    ? JSON.parse(Cookies.get(AUTH_COOKIE_NAME)!)
-    : null,
+  userData:
+    Cookies.get(AUTH_COOKIE_NAME) &&
+    Cookies.get(AUTH_COOKIE_NAME) !== "undefined"
+      ? JSON.parse(Cookies.get(AUTH_COOKIE_NAME)!)
+      : null,
 
   // Set auth data
   setUserData: (data) => {
     set({ userData: data });
     Cookies.set(AUTH_COOKIE_NAME, JSON.stringify(data), {
+      expires: 7,
+      secure: true,
+      sameSite: "strict",
+    });
+  },
+
+  // Set active session
+  setActiveSession: (session) => {
+    const currentData = get().userData;
+    if (!currentData) return;
+
+    const updatedData = { ...currentData, active_session: session };
+
+    set({ userData: updatedData });
+    Cookies.set(AUTH_COOKIE_NAME, JSON.stringify(updatedData), {
       expires: 7,
       secure: true,
       sameSite: "strict",

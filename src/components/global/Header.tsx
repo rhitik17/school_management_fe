@@ -6,15 +6,72 @@ import { toast } from "react-toastify";
 import FormInput from "../common/FormInput";
 import Button from "../common/Button";
 import { useAuthStore } from "../../stores/userStore";
+import CustomDropdown from "../common/CustomSelect";
+import { listPost, switchSession } from "../../services/endpoints/postApi";
+import { Session } from "../../types/commonTypes";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [sessionOptions, setSessionOptions] = useState<
+    { value: string; label: string }[]
+  >([]);
+  const [loadingSessions, setLoadingSessions] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  const { userData, setUserData, clearUserData } = useAuthStore();
+  const { userData, setUserData, clearUserData, setActiveSession } =
+    useAuthStore();
   const token = userData?.access;
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      setLoadingSessions(true);
+      const res = await listPost(`/academic-sessions`);
+      const results = res?.data?.results || [];
+      setSessions(results);
+      setSessionOptions(
+        results.map((item: any) => ({
+          value: item.id.toString(),
+          label: item.name,
+        }))
+      );
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoadingSessions(false);
+    }
+  };
+
+  // switch session
+  const handleSwitchSession = async (value: string | string[]) => {
+    try {
+      const payload = {
+        session_id: Number(value),
+      };
+      const res = await switchSession(payload);
+      if (res.code === 200) {
+        const selectedSession = sessions?.find(
+          (item) => item.id === Number(value)
+        );
+
+        if (selectedSession) {
+          setActiveSession(selectedSession);
+        }
+        navigate(0);
+      }
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.detail || error.response.data.message);
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
+    }
+  };
   const handleClickOutside = useCallback((event: MouseEvent) => {
     if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
       setIsOpen(false);
@@ -58,8 +115,20 @@ const Header = () => {
           placeholder="Search..."
           iconPosition="start"
         >
-          <Icons.Search className="ml-2"/>
+          <Icons.Search className="ml-2" />
         </FormInput>
+      </div>
+
+      {/* switch Academic session */}
+      <div className="min-w-40">
+        <CustomDropdown
+          label="Current Session"
+          options={sessionOptions}
+          value={String(userData?.active_session?.id)}
+          onChange={(value) => handleSwitchSession(value)}
+          placeholder={loadingSessions ? "..." : "Select Session"}
+          dropDownClass="w-full"
+        />
       </div>
       <div className="flex items-center justify-end">
         {token ? (
@@ -97,10 +166,7 @@ const Header = () => {
               >
                 <div className="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full">
                   <span className="text-sm font-medium text-gray-600">
-                    {userData?.email
-                      ?.split("@")[0]
-                      .slice(0, 2)
-                      .toUpperCase()}
+                    {userData?.email?.split("@")[0].slice(0, 2).toUpperCase()}
                   </span>
                 </div>
 
@@ -108,9 +174,7 @@ const Header = () => {
                   <p className="text-sm font-medium text-gray-900">
                     {userData?.email}
                   </p>
-                  <p className="text-xs text-gray-500">
-                    {userData?.user_type}
-                  </p>
+                  <p className="text-xs text-gray-500">{userData?.user_type}</p>
                 </div>
               </button>
 
@@ -137,11 +201,11 @@ const Header = () => {
             </div>
           </div>
         ) : (
-         <Button
-         text="Login"
-         variant="primary"
-         action={()=>navigate("/login")}
-         />
+          <Button
+            text="Login"
+            variant="primary"
+            action={() => navigate("/login")}
+          />
         )}
       </div>
     </header>
