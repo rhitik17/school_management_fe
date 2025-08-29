@@ -5,8 +5,9 @@ import { listPost } from "../../services/endpoints/postApi";
 import { ClassItem } from "../../types/commonTypes";
 import CustomDropdown from "../common/CustomSelect";
 import Button from "../common/Button";
+import  { SpinningLoader2 } from "../common/loading/SpinningLoader";
 
-const SubjectGroupFields = ({ control, watch, setValue }: any) => {
+const SubjectGroupFields = ({ control, data, watch, setValue }: any) => {
   // State
   const [classes, setClasses] = useState<ClassItem[]>([]);
   const [classOptions, setClassOptions] = useState<
@@ -93,6 +94,28 @@ const SubjectGroupFields = ({ control, watch, setValue }: any) => {
     }
   }, [selectedClassId, classes]);
 
+  // if contains data, for editing
+  const ready = data && sectionOptions && subjectOptions && teacherOptions
+useEffect(() => {
+  if (ready) {
+    setValue("name", data.name || "");
+    setValue("class_instance", data.class_instance || null);
+    setValue("description", data.description || "");
+    setValue(
+      "section_ids",
+      data.sections?.map((s: any) => s.id) || []
+    );
+    setValue(
+      "subject_teacher_mappings",
+      data.subjects?.map((sub: any) => ({
+        subject: sub.id,
+        teacher: sub.teacher_id,
+      })) || []
+    );
+  }
+}, [ready, setValue]);
+
+
   // Add/remove subject-teacher rows
   const addSubjectTeacher = () => {
     setValue("subject_teacher_mappings", [
@@ -158,7 +181,7 @@ const SubjectGroupFields = ({ control, watch, setValue }: any) => {
               </label>
               <div className="grid gap-2">
                 {loadingSections ? (
-                  <span>Loading sections...</span>
+                  <SpinningLoader2 className="h-6 w-6 ml-4"/>
                 ) : sectionOptions.length === 0 ? (
                   <span className="text-xs text-gray-500">
                     No sections found.

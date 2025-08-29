@@ -1,10 +1,19 @@
 import { Controller } from "react-hook-form";
 import FormInput from "../common/FormInput";
-// import { useAuthStore } from "../../stores/userStore";
+import { useEffect } from "react";
 
-const SessionFields = ({ control }: any) => {
-  // const { userData } = useAuthStore();
-
+const SessionFields = ({ control, data, setValue }: any) => {
+  //if contains data, for editing
+  useEffect(() => {
+    if (data) {
+      setValue("name", data.name || "");
+      setValue("start_date", data.start_date ?? "", { shouldValidate: true });
+      setValue("end_date", data.end_date ?? "", { shouldValidate: true });
+      setValue("is_current", data.is_current ?? false, {
+        shouldValidate: true,
+      });
+    }
+  }, [data, setValue]);
   return (
     <>
       {/* Session Name */}

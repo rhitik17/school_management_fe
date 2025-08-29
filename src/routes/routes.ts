@@ -10,22 +10,15 @@ const ROUTES = {
   // private routes
   DASHBOARD: "/dashboard",
   CREATE_SCHOOL: "/create-school",
-  LIST_SCHOOL: "/schools",
-  ADD_SCHOOL: "/schools/add",
-  LIST_SESSION: "/academic-sessions",
-  ADD_SESSION: "/academic-sessions/add",
-  LIST_CLASS: "/classes",
-  ADD_CLASS: "/classes/add",
-  LIST_SECTION: "/sections",
-  ADD_SECTION: "/sections/add",
-  LIST_SUBJECT: "/subjects",
-  ADD_SUBJECT: "/subjects/add",
-  LIST_SUBJECT_GROUP: "/subject-groups",
-  ADD_SUBJECT_GROUP: "/subject-groups/add",
   LIST_STUDENT: "/students",
   ADD_STUDENT: "/students/add",
   LIST_EMPLOYEE: "/employees",
   ADD_EMPLOYEE: "/employees/add",
+
+  // Dynamic patterns
+  ADD: (type: string) => `/${type}/add`,
+  EDIT: (type: string) => `/${type}/:id`,
+  LIST: (type: string) => `/${type}`,
 
   //pages routes
   ASSIGN_CLASS_TEACHER: "/assign-class-teacher",

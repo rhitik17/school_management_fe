@@ -3,8 +3,9 @@ import Button from "../../components/common/Button";
 import { Icons } from "../../assets/icons";
 import { deletePost, listPost } from "../../services/endpoints/postApi";
 import { useNavigate } from "react-router-dom";
-import { PostType } from "../../types/postType";
+import { getPostTitle, PostType } from "../../types/postType";
 import Pagination from "../../components/common/Pagination";
+import TableLoading from "../../components/common/loading/TableLoading";
 
 interface ListPostProps {
   postType: PostType;
@@ -34,6 +35,7 @@ export default function ListPost({ postType }: ListPostProps) {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const res = await listPost(`/${postType}`);
       setData(res.data.results || []);
       setPagination(res.data.pagination);
@@ -46,7 +48,7 @@ export default function ListPost({ postType }: ListPostProps) {
 
   const handleEdit = (id: string) => {
     console.log("Edit", id);
-    // Add your navigation or modal logic here
+    navigate(`/${postType}/${id}`);
   };
 
   const handleDelete = async (id: string) => {
@@ -65,11 +67,11 @@ export default function ListPost({ postType }: ListPostProps) {
       {/* Header with title and Add button */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-semibold text-gray-800 capitalize">
-          {postType}
+          {getPostTitle(postType)}
         </h1>
         <Button
           variant="primary"
-          text={`Add ${postType}`}
+          text={`Add ${getPostTitle(postType)}`}
           action={() => navigate(`/${postType}/add`)}
         />
       </div>
@@ -88,14 +90,18 @@ export default function ListPost({ postType }: ListPostProps) {
           <tbody className="text-gray-700">
             {loading ? (
               <tr>
-                <td className="px-4 py-4" colSpan={3}>
-                  Loading...
+                <td colSpan={6} className="py-6">
+                  <div className="w-full h-20 flex items-center justify-center">
+                    <TableLoading />
+                  </div>
                 </td>
               </tr>
             ) : data.length === 0 ? (
               <tr>
-                <td className="px-4 py-4 italic text-gray-500" colSpan={3}>
-                  No data found.
+                <td colSpan={4} className="py-6">
+                  <div className="w-full flex items-center justify-center text-gray-500">
+                    No data found
+                  </div>
                 </td>
               </tr>
             ) : (

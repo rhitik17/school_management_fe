@@ -52,7 +52,7 @@ const Register = () => {
   const onSubmit = async (data: RegisterForm) => {
     try {
       setLoading(true);
-      const response = await registerApi(data); // payload matches API
+      const response = await registerApi(data); 
       setEmail(data.email);
       setPassword(data.password)
       toast.success(response.message);

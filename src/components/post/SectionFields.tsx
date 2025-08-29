@@ -1,7 +1,15 @@
 import { Controller } from "react-hook-form";
 import FormInput from "../common/FormInput";
+import { useEffect } from "react";
 
-const SectionFields = ({ control }: any) => {
+const SectionFields = ({ control, data, setValue }: any) => {
+  //if contains data, for editing
+  useEffect(() => {
+    if (data) {
+      setValue("name", data.name || "");
+      setValue("description", data.description || "");
+    }
+  }, [data, setValue]);
   return (
     <>
       <div>
@@ -18,7 +26,7 @@ const SectionFields = ({ control }: any) => {
           )}
         />
       </div>
-         <div>
+      <div>
         <Controller
           name="description"
           control={control}

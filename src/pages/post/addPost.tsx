@@ -1,26 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Button from "../../components/common/Button";
 import SchoolFields from "../../components/post/SchoolFields";
 import SessionFields from "../../components/post/SessionFields";
 import SectionFields from "../../components/post/SectionFields";
-import { createPost } from "../../services/endpoints/postApi";
+import {
+  createPost,
+  editPost,
+  singlePost,
+} from "../../services/endpoints/postApi";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Icons } from "../../assets/icons";
 import ClassFields from "../../components/post/ClassFields";
-import { PostType } from "../../types/postType";
+import { getPostTitle, PostType } from "../../types/postType";
 import EmployeeFields from "../../components/post/EmployeeFields";
 import StudentFields from "../../components/post/StudentFields";
 import SubjectFields from "../../components/post/SubjectFields";
 import SubjectGroupFields from "../../components/post/subjectGroupFields";
+import { AnimatePresence } from "framer-motion";
+import { FadeAnimation } from "../../utils/animation";
+import SpinningLoader from "../../components/common/loading/SpinningLoader";
 
 interface AddPostProps {
   postType: PostType;
 }
 
 const AddPost: React.FC<AddPostProps> = ({ postType }) => {
+  const [data, setData] = useState();
+  const [loadingPost, setLoadingPost] = useState(false);
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
 
   // dynamic default values depending on postType
   const getDefaultValues = () => {
@@ -36,7 +46,7 @@ const AddPost: React.FC<AddPostProps> = ({ postType }) => {
           ],
         };
       case "classes":
-        return { name: "", description: "", section_ids: undefined };
+        return { name: "", description: "", section_ids: [] };
       case "subjects":
         return { name: "", subject_type: undefined, subject_code: undefined };
       case "sections":
@@ -57,11 +67,44 @@ const AddPost: React.FC<AddPostProps> = ({ postType }) => {
   } = useForm({
     defaultValues: getDefaultValues(),
   });
+  useEffect(() => {
+    const fetchData = async () => {
+      if (id) {
+        try {
+          setLoadingPost(true);
+          const res = await singlePost(postType, Number(id));
+          if (res?.data) {
+            setData(res?.data);
+          }
+        } catch (error: any) {
+          console.error("Error:", error);
+          const message =
+            error?.response?.data?.detail ||
+            error?.message ||
+            "An error occurred. Please try again.";
+          toast.error(message);
+        } finally {
+          setLoadingPost(false);
+        }
+      }
+    };
 
-  const onSubmit = async (data: any) => {
+    fetchData();
+  }, [id, postType, reset]);
+
+  const onSubmit = async (data?: any) => {
     try {
-      const res = await createPost(`${postType}`, data);
-      toast.success(res.message);
+      let res;
+      if (id) {
+        res = await editPost(`${postType}`, data, Number(id));
+
+        toast.success(
+          res.message || `${getPostTitle(postType)} updated sucessfully`
+        );
+      } else {
+        res = await createPost(`${postType}`, data);
+        toast.success(res.message || `${getPostTitle(postType)} added sucessfully`);
+      }
       navigate(`/${postType}`);
       reset();
     } catch (error: any) {
@@ -74,30 +117,43 @@ const AddPost: React.FC<AddPostProps> = ({ postType }) => {
     }
   };
 
-  const renderFields = () => {
+  const renderFields = (data: any) => {
     switch (postType) {
       case "schools":
         return <SchoolFields control={control} />;
       case "academic-sessions":
-        return <SessionFields control={control} />;
+        return (
+          <SessionFields control={control} data={data} setValue={setValue} />
+        );
       case "classes":
-        return <ClassFields control={control} />;
+        return (
+          <ClassFields control={control} data={data} setValue={setValue} />
+        );
       case "sections":
-        return <SectionFields control={control} />;
+        return (
+          <SectionFields control={control} data={data} setValue={setValue} />
+        );
       case "subjects":
-        return <SubjectFields control={control} />;
+        return (
+          <SubjectFields control={control} data={data} setValue={setValue} />
+        );
       case "subject-groups":
         return (
           <SubjectGroupFields
             control={control}
             watch={watch}
+            data={data}
             setValue={setValue}
           />
         );
       case "employees":
-        return <EmployeeFields control={control} />;
+        return (
+          <EmployeeFields control={control} data={data} setValue={setValue} />
+        );
       case "students":
-        return <StudentFields control={control} />;
+        return (
+          <StudentFields control={control} data={data} setValue={setValue} />
+        );
       default:
         return null;
     }
@@ -119,16 +175,32 @@ const AddPost: React.FC<AddPostProps> = ({ postType }) => {
         }`}
       >
         <h1 className="mb-4 text-xl font-semibold capitalize">
-          Add {postType}
+          {data ? "Edit" : "Add"} {getPostTitle(postType)}
         </h1>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 ">
-          {renderFields()}
+          <AnimatePresence>
+            {loadingPost ? (
+              <FadeAnimation className="h-full w-full flex items-center justify-center">
+                <SpinningLoader className="h-16 w-16" />
+              </FadeAnimation>
+            ) : (
+              <FadeAnimation>{renderFields(data)}</FadeAnimation>
+            )}
+          </AnimatePresence>
           <Button
             type="submit"
             disable={isSubmitting}
             className="w-full"
             variant="primary"
-            text={isSubmitting ? "Saving..." : `Add ${postType}`}
+            text={
+              isSubmitting ? (
+                <>
+                  Saving... <SpinningLoader />
+                </>
+              ) : (
+                `${data ? "Update" : "Add"} ${getPostTitle(postType)}`
+              )
+            }
           />
         </form>
       </div>

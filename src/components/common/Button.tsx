@@ -6,7 +6,7 @@ export type ButtonVariant = "primary" | "secondary" | "custom";
 
 export type ButtonProps = {
   action?: (e: React.FormEvent) => void;
-  text?: string;
+  text?: string | React.ReactNode;
   icon?: React.ReactNode | string;
   className?: string;
   style?: React.CSSProperties;
