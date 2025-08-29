@@ -5,23 +5,24 @@ import ListPost from "../pages/post/listPost";
 import AddPost from "../pages/post/addPost";
 import AssignClassTeacher from "../pages/assignClassTeacher";
 import CreateSubjectGroup from "../pages/dummyPages/createSubjectGroup";
+import { PostType } from "../types/postType";
+
+const generateCrudRoutes = (postType: PostType) => [
+  { path: ROUTES.ADD(postType), element: <AddPost postType={postType} /> },
+  { path: ROUTES.EDIT(postType), element: <AddPost postType={postType} /> },
+  { path: ROUTES.LIST(postType), element: <ListPost postType={postType} /> },
+];
 
 export const privateRoutes = [
   { path: ROUTES.DASHBOARD, element: <Dashboard /> },
   { path: ROUTES.CREATE_SCHOOL, element: <CreateSchool /> },
   //Academic Routes
-  { path: ROUTES.ADD_SCHOOL, element: <AddPost postType="schools" /> },
-  { path: ROUTES.LIST_SCHOOL, element: <ListPost postType="schools" /> },
-  { path: ROUTES.ADD_SESSION, element: <AddPost postType="academic-sessions" /> },
-  { path: ROUTES.LIST_SESSION, element: <ListPost postType="academic-sessions" /> },
-  { path: ROUTES.ADD_CLASS, element: <AddPost postType="classes" /> },
-  { path: ROUTES.LIST_CLASS, element: <ListPost postType="classes" /> },
-  { path: ROUTES.ADD_SECTION, element: <AddPost postType="sections" /> },
-  { path: ROUTES.LIST_SECTION, element: <ListPost postType="sections" /> },
-  { path: ROUTES.ADD_SUBJECT, element: <AddPost postType="subjects" /> },
-  { path: ROUTES.LIST_SUBJECT, element: <ListPost postType="subjects" /> },
-    { path: ROUTES.ADD_SUBJECT_GROUP, element: <AddPost postType="subject-groups" /> },
-  { path: ROUTES.LIST_SUBJECT_GROUP, element: <ListPost postType="subject-groups" /> },
+  ...generateCrudRoutes("schools"),
+  ...generateCrudRoutes("academic-sessions"),
+  ...generateCrudRoutes("classes"),
+  ...generateCrudRoutes("sections"),
+  ...generateCrudRoutes("subjects"),
+  ...generateCrudRoutes("subject-groups"),
 
   //Assign Routes
   { path: ROUTES.ASSIGN_CLASS_TEACHER, element: <AssignClassTeacher /> },

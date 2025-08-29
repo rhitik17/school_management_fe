@@ -23,6 +23,27 @@ export const listPost = async (postType: any) => {
   }
 };
 
+export const singlePost = async (postType: any, id:number) => {
+  try {
+    const response = await api.get(`${postType}/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching post:", error);
+    throw error;
+  }
+};
+
+
+export const editPost = async (postType: PostType, data:any, id:number) => {
+  try {
+    const response = await api.patch(`${postType}/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating post:", error);
+    throw error;
+  }
+};
+
 export const deletePost = async (postType: any, id:string) => {
   try {
     const response = await api.delete(`${postType}/${id}/`);
