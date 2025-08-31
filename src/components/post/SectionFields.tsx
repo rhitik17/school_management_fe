@@ -11,7 +11,7 @@ const SectionFields = ({ control, data, setValue }: any) => {
     }
   }, [data, setValue]);
   return (
-    <>
+    <div className="space-y-6">
       <div>
         <Controller
           name="name"
@@ -40,7 +40,7 @@ const SectionFields = ({ control, data, setValue }: any) => {
           )}
         />
       </div>
-    </>
+    </div>
   );
 };
 

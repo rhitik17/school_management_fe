@@ -23,14 +23,14 @@ export const privateRoutes = [
   ...generateCrudRoutes("sections"),
   ...generateCrudRoutes("subjects"),
   ...generateCrudRoutes("subject-groups"),
+  ...generateCrudRoutes("students"),
 
   //Assign Routes
   { path: ROUTES.ASSIGN_CLASS_TEACHER, element: <AssignClassTeacher /> },
   { path: ROUTES.CREATE_SUBJECT_GROUP, element: <CreateSubjectGroup /> },
 
   //User Management Routes
-  { path: ROUTES.ADD_STUDENT, element: <AddPost postType="students" /> },
-  { path: ROUTES.LIST_STUDENT, element: <ListPost postType="students" /> },
+
   { path: ROUTES.ADD_EMPLOYEE, element: <AddPost postType="employees" /> },
   { path: ROUTES.LIST_EMPLOYEE, element: <ListPost postType="employees" /> },
 ];
