@@ -1,15 +1,36 @@
-import { useState } from "react";
-import { Controller, } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { Controller } from "react-hook-form";
 import FormInput from "../common/FormInput";
+import { useClassOptions } from "../../hooks/postListHook";
+import CustomDropdown from "../common/CustomSelect";
+import { dropdownFormat } from "../../utils/dropdownFormat";
+import { Section } from "../../types/commonTypes";
 
 const tabs = ["Personal Info", "Guardian Info", "Document Info"];
 
-const StudentFields = ({ control }: any) => {
+const StudentFields = ({ control, watch }: any) => {
   const [activeTab, setActiveTab] = useState("Personal Info");
-
   const [previewUrl, setPreviewUrl] = useState<string>("");
+  const [loadingSections, setLoadingSections] = useState(false);
+  const [sectionList, setSectionList] = useState<Section[] >([]);
 
-  // Watch the file input
+  const { postList: classList } = useClassOptions("classes");
+
+  const selectedClassId = watch("current_class");
+  // Update section options when class_instance changes
+  useEffect(() => {
+    if (selectedClassId) {
+      setLoadingSections(true);
+      const selectedClass = classList.find((cls) => cls.id === selectedClassId);
+      if (selectedClass) {
+        setSectionList(selectedClass.sections);
+        console.log("aayo hai", selectedClass.sections);
+      }
+      setTimeout(() => setLoadingSections(false), 300);
+    } else {
+      setSectionList([]);
+    }
+  }, [selectedClassId, classList]);
 
   return (
     <div className="space-y-4">
@@ -42,7 +63,7 @@ const StudentFields = ({ control }: any) => {
               </h2>
               <div className="grid gap-4 sm:grid-cols-2">
                 <Controller
-                  name="academicYear"
+                  name="academic_year"
                   control={control}
                   defaultValue=""
                   render={({ field }) => (
@@ -54,14 +75,16 @@ const StudentFields = ({ control }: any) => {
                   )}
                 />
                 <Controller
-                  name="class"
+                  name="current_class"
                   control={control}
                   defaultValue=""
                   render={({ field }) => (
-                    <FormInput
-                      label="Class"
-                      placeholder="Select class"
+                    <CustomDropdown
+                      label="Select Class"
+                      options={dropdownFormat(classList)}
                       {...field}
+                      dropDownClass="w-full"
+                      placeholder={loadingSections ? "..." : "Select Section"}
                     />
                   )}
                 />
@@ -70,15 +93,16 @@ const StudentFields = ({ control }: any) => {
                   control={control}
                   defaultValue=""
                   render={({ field }) => (
-                    <FormInput
-                      label="Section"
-                      placeholder="Select section"
+                    <CustomDropdown
+                      label="Select Section"
+                      options={dropdownFormat(sectionList)}
                       {...field}
+                      dropDownClass="w-full"
                     />
                   )}
                 />
                 <Controller
-                  name="admissionNumber"
+                  name="admission_number"
                   control={control}
                   defaultValue=""
                   render={({ field }) => (
@@ -90,7 +114,7 @@ const StudentFields = ({ control }: any) => {
                   )}
                 />
                 <Controller
-                  name="admissionDate"
+                  name="admission_date"
                   control={control}
                   defaultValue=""
                   render={({ field }) => (
@@ -107,18 +131,18 @@ const StudentFields = ({ control }: any) => {
               </h2>
               <div className="grid gap-4 sm:grid-cols-2">
                 <Controller
-                  name="firstName"
+                  name="full_name"
                   control={control}
                   defaultValue=""
                   render={({ field }) => (
                     <FormInput
-                      label="First Name"
-                      placeholder="Enter first name"
+                      label="Full Name"
+                      placeholder="Enter full name"
                       {...field}
                     />
                   )}
                 />
-                <Controller
+                {/* <Controller
                   name="lastName"
                   control={control}
                   defaultValue=""
@@ -129,21 +153,27 @@ const StudentFields = ({ control }: any) => {
                       {...field}
                     />
                   )}
-                />
+                /> */}
                 <Controller
                   name="gender"
                   control={control}
                   defaultValue=""
                   render={({ field }) => (
-                    <FormInput
+                    <CustomDropdown
                       label="Gender"
+                      options={[
+                        { label: "Male", value: "male" },
+                        { label: "Female", value: "female" },
+                        { label: "Other", value: "other" },
+                      ]}
                       placeholder="Select gender"
+                      dropDownClass="w-full"
                       {...field}
                     />
                   )}
                 />
                 <Controller
-                  name="dob"
+                  name="date_of_birth"
                   control={control}
                   defaultValue=""
                   render={({ field }) => (
@@ -175,7 +205,7 @@ const StudentFields = ({ control }: any) => {
                   )}
                 />
                 <Controller
-                  name="studentPhoto"
+                  name="student_photo"
                   control={control}
                   defaultValue={null}
                   render={({ field: { onChange } }) => (
@@ -186,7 +216,7 @@ const StudentFields = ({ control }: any) => {
                         const file = e.target.files?.[0];
                         if (file) {
                           setPreviewUrl(URL.createObjectURL(file));
-                          onChange(file); 
+                          onChange(file);
                         }
                       }}
                     />
@@ -224,7 +254,7 @@ const StudentFields = ({ control }: any) => {
                   )}
                 />
                 <Controller
-                  name="phone"
+                  name="phone_number"
                   control={control}
                   defaultValue=""
                   render={({ field }) => (
@@ -245,7 +275,7 @@ const StudentFields = ({ control }: any) => {
               </h2>
               <div className="grid gap-4 sm:grid-cols-2">
                 <Controller
-                  name="currentAddress"
+                  name="current_address"
                   control={control}
                   defaultValue=""
                   render={({ field }) => (
@@ -257,7 +287,7 @@ const StudentFields = ({ control }: any) => {
                   )}
                 />
                 <Controller
-                  name="permanentAddress"
+                  name="permanent_address"
                   control={control}
                   defaultValue=""
                   render={({ field }) => (
@@ -279,7 +309,7 @@ const StudentFields = ({ control }: any) => {
             </h2>
             <div className="grid gap-4 sm:grid-cols-2">
               <Controller
-                name="bloodGroup"
+                name="blood_group"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
@@ -297,6 +327,7 @@ const StudentFields = ({ control }: any) => {
                 render={({ field }) => (
                   <FormInput
                     label="Height (cm)"
+                    type="number"
                     placeholder="Enter height"
                     {...field}
                   />
@@ -309,6 +340,7 @@ const StudentFields = ({ control }: any) => {
                 render={({ field }) => (
                   <FormInput
                     label="Weight (kg)"
+                    type="number"
                     placeholder="Enter weight"
                     {...field}
                   />
@@ -322,7 +354,7 @@ const StudentFields = ({ control }: any) => {
       {activeTab === "Guardian Info" && (
         <div className="grid gap-4 sm:grid-cols-2">
           <Controller
-            name="guardianName"
+            name="guardian_name"
             control={control}
             defaultValue=""
             render={({ field }) => (
@@ -334,7 +366,7 @@ const StudentFields = ({ control }: any) => {
             )}
           />
           <Controller
-            name="guardianContact"
+            name="guardian_phone_number"
             control={control}
             defaultValue=""
             render={({ field }) => (
@@ -346,7 +378,7 @@ const StudentFields = ({ control }: any) => {
             )}
           />
           <Controller
-            name="guardianRelation"
+            name="guardian_relationship"
             control={control}
             defaultValue=""
             render={({ field }) => (

@@ -21,6 +21,7 @@ import SubjectGroupFields from "../../components/post/subjectGroupFields";
 import { AnimatePresence } from "framer-motion";
 import { FadeAnimation } from "../../utils/animation";
 import SpinningLoader from "../../components/common/loading/SpinningLoader";
+import { createStudent } from "../../services/endpoints/studentApi";
 
 interface AddPostProps {
   postType: PostType;
@@ -102,8 +103,14 @@ const AddPost: React.FC<AddPostProps> = ({ postType }) => {
           res.message || `${getPostTitle(postType)} updated sucessfully`
         );
       } else {
-        res = await createPost(`${postType}`, data);
-        toast.success(res.message || `${getPostTitle(postType)} added sucessfully`);
+        if (postType === "students") {
+          res = await createStudent( data);
+        } else {
+          res = await createPost(`${postType}`, data);
+        }
+        toast.success(
+          res.message || `${getPostTitle(postType)} added sucessfully`
+        );
       }
       navigate(`/${postType}`);
       reset();
@@ -152,7 +159,12 @@ const AddPost: React.FC<AddPostProps> = ({ postType }) => {
         );
       case "students":
         return (
-          <StudentFields control={control} data={data} setValue={setValue} />
+          <StudentFields
+            control={control}
+            data={data}
+            setValue={setValue}
+            watch={watch}
+          />
         );
       default:
         return null;
