@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { getPostTitle, PostType } from "../../types/postType";
 import Pagination from "../../components/common/Pagination";
 import TableLoading from "../../components/common/loading/TableLoading";
+import DeletePopup from "../../components/common/model/DeletePopup";
+import { Section } from "../../types/commonTypes";
 
 interface ListPostProps {
   postType: PostType;
@@ -26,6 +28,9 @@ export default function ListPost({ postType }: ListPostProps) {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [openDeletePopup, setOpenDeletePopup] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<any>(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -84,6 +89,9 @@ export default function ListPost({ postType }: ListPostProps) {
               <th className="px-4 py-3">#</th>
               <th className="px-4 py-3">ID</th>
               <th className="px-4 py-3 capitalize">Title</th>
+              {postType === "classes" && (
+                <th className="px-4 py-3 capitalize">Sections</th>
+              )}
               <th className="px-4 py-3">Actions</th>
             </tr>
           </thead>
@@ -114,18 +122,34 @@ export default function ListPost({ postType }: ListPostProps) {
 
                   <td className="px-4 py-3">{item.id}</td>
                   <td className="px-4 py-3">
-                    {postType === "schools" ? item.name : item.name || "-"}
+                    {postType === "students"
+                      ? item.full_name
+                      : item.name || "-"}
                   </td>
+
+                  {postType === "classes" && (
+                    <td className="px-4 py-3">
+                      {item.sections
+                        ?.map((section: Section) => section.name)
+                        .join(", ")}
+                    </td>
+                  )}
+
                   <td className="px-4 py-3 space-x-2">
                     <button
                       onClick={() => handleEdit(item.id)}
                       className="text-blue-600 hover:text-blue-800"
+                      title="view/edit"
                     >
                       <Icons.Eye size={18} />
                     </button>
                     <button
-                      onClick={() => handleDelete(item.id)}
+                      onClick={() => {
+                        setSelectedItem(item);
+                        setOpenDeletePopup(true);
+                      }}
                       className="text-red-600 hover:text-red-800"
+                      title="delete"
                     >
                       <Icons.Trash size={18} />
                     </button>
@@ -144,6 +168,18 @@ export default function ListPost({ postType }: ListPostProps) {
           loading={loading}
         />
       </div>
+      <DeletePopup
+        open={openDeletePopup}
+        handleClose={() => setOpenDeletePopup(false)}
+        handleDelete={() => handleDelete(selectedItem?.id)}
+        title={`Confirm Delete ${getPostTitle(postType)}`}
+        deletingItem={
+          postType === "students" ? selectedItem?.full_name : selectedItem?.name
+        }
+        description="This action cannot be undone."
+        deleteButtonText="Delete"
+        cancelButtonText="Cancel"
+      />
     </div>
   );
 }
