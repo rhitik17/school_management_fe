@@ -112,7 +112,7 @@ export default function Popup({
 
             {title && (
               <div className="flex flex-col px-6 pt-6 pb-2 ">
-                <div className=" flex justify-between w-full ">
+                <div className=" flex justify-between  w-full border-b-2 ">
                   <span className="text-[16px] font-semibold text-[#12151C]">
                     {title}
                   </span>

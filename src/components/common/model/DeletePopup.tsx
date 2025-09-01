@@ -18,7 +18,6 @@ interface DeletePopupProps {
 const DeletePopup: React.FC<DeletePopupProps> = ({
   open,
   handleClose,
-
   handleDelete,
   title,
   deletingItem,
@@ -51,7 +50,7 @@ const DeletePopup: React.FC<DeletePopupProps> = ({
           You are about to {deleteButtonText.toLowerCase()}{" "}
           <span className="font-semibold">{deletingItem}</span>. {description}
         </p>
-        <div className="flex justify-end items-center gap-x-3 ">
+        <div className="flex justify-end items-center gap-x-3  ">
           {/* Cancel button */}
           <button
             onClick={handleClose}
