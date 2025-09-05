@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getPostTitle, PostType } from "../../types/postType";
-import { Section } from "../../types/commonTypes";
-import { listPost, deletePost } from "../../services/endpoints/postApi";
 import CommonTable from "../../components/post/CommonTable";
+import { deleteClassTeacher, listClassTeacher } from "../../services/endpoints/classTeacherApi";
 
-interface ListPostProps {
-  postType: PostType;
-}
 
-export default function ListPost({ postType }: ListPostProps) {
+
+export default function ListClassTeacher() {
   const [data, setData] = useState<any[]>([]);
   const [pagination, setPagination] = useState<any>();
   const [loading, setLoading] = useState(true);
@@ -20,12 +16,12 @@ export default function ListPost({ postType }: ListPostProps) {
 
   useEffect(() => {
     fetchData();
-  }, [postType]);
+  }, []);
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const res = await listPost(`/${postType}`);
+      const res = await listClassTeacher();
       setData(res.data.results || []);
       setPagination(res.data.pagination);
     } catch (error) {
@@ -36,14 +32,13 @@ export default function ListPost({ postType }: ListPostProps) {
   };
 
   const handleEdit = (id: string) => {
-    navigate(`/${postType}/${id}`);
+    navigate(`/class-teacher/${id}`);
   };
 
   const handleDelete = async (id: string) => {
     try {
-      await deletePost(postType, id);
-      setData((prevData) => prevData.filter((item) => item.id !== id));
-
+      await deleteClassTeacher( id);
+      // Refetch data after deletion
       fetchData();
     } catch (error) {
       console.error("Error deleting item:", error);
@@ -57,23 +52,14 @@ export default function ListPost({ postType }: ListPostProps) {
       key: "title",
       label: "Title",
       render: (item: any) =>
-        postType === "students" ? item.full_name : item.name || "-",
+         item.name || "-",
     },
-    ...(postType === "classes"
-      ? [
-          {
-            key: "sections",
-            label: "Sections",
-            render: (item: any) =>
-              item.sections?.map((s: Section) => s.name).join(", "),
-          },
-        ]
-      : []),
+  
   ];
 
   return (
     <CommonTable
-      title={getPostTitle(postType)}
+      title={"Class Teacher"}
       data={data}
       columns={columns}
       loading={loading}
@@ -82,7 +68,7 @@ export default function ListPost({ postType }: ListPostProps) {
       setLimit={setLimit}
       page={page}
       setPage={setPage}
-      onAdd={() => navigate(`/${postType}/add`)}
+      onAdd={() => navigate(`/assign-class-teacher`)}
       onEdit={handleEdit}
       onDelete={handleDelete}
     />

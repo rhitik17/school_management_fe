@@ -21,8 +21,9 @@ const ROUTES = {
   LIST: (type: string) => `/${type}`,
 
   //pages routes
-  ASSIGN_CLASS_TEACHER: "/assign-class-teacher",
-  CREATE_SUBJECT_GROUP: "/create-subject-group",
+  ASSIGN_CLASS_TEACHER:"/assign-class-teacher",
+  LIST_CLASS_TEACHER:"/class-teachers",
+
 
   // usermanagement routes
   PROFILE: "/profile",

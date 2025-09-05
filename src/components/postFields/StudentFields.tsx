@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import FormInput from "../common/FormInput";
 import CustomDropdown from "../common/CustomSelect";
-import { useClassOptions } from "../../hooks/postListHook";
 import { dropdownFormat } from "../../utils/dropdownFormat";
 import { Section } from "../../types/commonTypes";
 import { isValidEmail, isValidPhoneNumber } from "../../utils/validation";
+import { usePostList } from "../../hooks/postListHook";
 
 // Dropdown Constants
 const tabs = ["Personal Info", "Guardian Info"];
@@ -31,8 +31,8 @@ const StudentFields = ({ control, watch }: any) => {
   const [loadingSections, setLoadingSections] = useState(false);
   const [sectionList, setSectionList] = useState<Section[]>([]);
 
-  const { postList: classList } = useClassOptions("classes");
-  const { postList: academic_years } = useClassOptions("academic-sessions");
+  const { postList: classList } = usePostList("classes");
+  const { postList: academic_years } = usePostList("academic-sessions");
 
   const selectedClassId = watch("current_class");
 
