@@ -6,6 +6,7 @@ import AddPost from "../pages/post/addPost";
 import { PostType } from "../types/postType";
 import AssignClassTeacher from "../pages/class-teacher/assignClassTeacher";
 import ListClassTeacher from "../pages/class-teacher/listClassTeacher";
+import { Navigate } from "react-router-dom";
 
 const generateCrudRoutes = (postType: PostType) => [
   { path: ROUTES.ADD(postType), element: <AddPost postType={postType} /> },
@@ -14,6 +15,7 @@ const generateCrudRoutes = (postType: PostType) => [
 ];
 
 export const privateRoutes = [
+  { path: "/", element: <Navigate to={ROUTES.DASHBOARD} replace /> },
   { path: ROUTES.DASHBOARD, element: <Dashboard /> },
   { path: ROUTES.CREATE_SCHOOL, element: <CreateSchool /> },
   //Academic Routes
