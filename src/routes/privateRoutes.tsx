@@ -3,7 +3,6 @@ import CreateSchool from "../pages/setup/createSchool";
 import Dashboard from "../pages/dashboard";
 import ListPost from "../pages/post/listPost";
 import AddPost from "../pages/post/addPost";
-import CreateSubjectGroup from "../pages/dummyPages/createSubjectGroup";
 import { PostType } from "../types/postType";
 import AssignClassTeacher from "../pages/class-teacher/assignClassTeacher";
 import ListClassTeacher from "../pages/class-teacher/listClassTeacher";
