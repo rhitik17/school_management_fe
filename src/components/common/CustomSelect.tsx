@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, ReactNode } from "react";
 import { debounce } from "lodash";
 import { Icons } from "../../assets/icons";
 
@@ -18,7 +18,7 @@ interface CustomDropdownProps {
   options?: Option[];
   buttons?: Button[];
   isMulti?: boolean;
-  placeholder?: string;
+  placeholder?: string | ReactNode;
   icon?: React.ReactNode | string;
   onChange: (value: string | string[]) => void;
   value?: string | string[];

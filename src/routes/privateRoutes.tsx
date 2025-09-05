@@ -3,9 +3,10 @@ import CreateSchool from "../pages/setup/createSchool";
 import Dashboard from "../pages/dashboard";
 import ListPost from "../pages/post/listPost";
 import AddPost from "../pages/post/addPost";
-import AssignClassTeacher from "../pages/assignClassTeacher";
 import CreateSubjectGroup from "../pages/dummyPages/createSubjectGroup";
 import { PostType } from "../types/postType";
+import AssignClassTeacher from "../pages/class-teacher/assignClassTeacher";
+import ListClassTeacher from "../pages/class-teacher/listClassTeacher";
 
 const generateCrudRoutes = (postType: PostType) => [
   { path: ROUTES.ADD(postType), element: <AddPost postType={postType} /> },
@@ -27,9 +28,13 @@ export const privateRoutes = [
   ...generateCrudRoutes("employees"),
 
 
+
+
   //Assign Routes
   { path: ROUTES.ASSIGN_CLASS_TEACHER, element: <AssignClassTeacher /> },
-  { path: ROUTES.CREATE_SUBJECT_GROUP, element: <CreateSubjectGroup /> },
+  { path: ROUTES.LIST_CLASS_TEACHER, element: <ListClassTeacher /> },
+
+
 
   //User Management Routes
 ];

@@ -3,52 +3,52 @@ import api from "../api";
 
 
 // helper to convert normal object -> FormData
-const objectToFormData = (data: any) => {
-  const formData = new FormData();
-  Object.entries(data).forEach(([key, value]) => {
-    if (value !== null && value !== undefined) {
-      // handle files
-      if ((key === "studentPhoto" || "photo" )&& value instanceof File) {
-        formData.append(key, value);
-      } else if (Array.isArray(value)) {
-        value.forEach((v, i) => formData.append(`${key}[${i}]`, v));
-      } else {
-        formData.append(key, value as any);
-      }
-    }
-  });
-  return formData;
-};
+// const objectToFormData = (data: any) => {
+//   const formData = new FormData();
+//   Object.entries(data).forEach(([key, value]) => {
+//     if (value !== null && value !== undefined) {
+//       // handle files
+//       if ((key === "studentPhoto" || "photo" )&& value instanceof File) {
+//         formData.append(key, value);
+//       } else if (Array.isArray(value)) {
+//         value.forEach((v, i) => formData.append(`${key}[${i}]`, v));
+//       } else {
+//         formData.append(key, value as any);
+//       }
+//     }
+//   });
+//   return formData;
+// };
 
-export const createPost = async (postType: PostType, data: any) => {
-  try {
-    let payload = data;
-    let headers: any = {};
-
-    // Only students (and maybe employees later) need FormData
-    if (postType === "students" || "employees") {
-      payload = objectToFormData(data);
-      headers["Content-Type"] = "multipart/form-data";
-    }
-
-    const response = await api.post(`${postType}/`, payload, { headers });
-    return response.data;
-  } catch (error) {
-    console.error("Error creating post:", error);
-    throw error;
-  }
-};
-
-
-// export const createPost = async (postType: PostType, data:any) => {
+// export const createPost = async (postType: PostType, data: any) => {
 //   try {
-//     const response = await api.post(`${postType}/`, data);
+//     let payload = data;
+//     let headers: any = {};
+
+//     // Only students (and maybe employees later) need FormData
+//     if (postType === "students" || "employees") {
+//       payload = objectToFormData(data);
+//       headers["Content-Type"] = "multipart/form-data";
+//     }
+
+//     const response = await api.post(`${postType}/`, payload, { headers });
 //     return response.data;
 //   } catch (error) {
 //     console.error("Error creating post:", error);
 //     throw error;
 //   }
 // };
+
+
+export const createPost = async (postType: PostType, data:any) => {
+  try {
+    const response = await api.post(`${postType}/`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating post:", error);
+    throw error;
+  }
+};
 
 
 export const listPost = async (postType: any) => {

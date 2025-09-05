@@ -6,7 +6,9 @@ export type PostType =
   | "employees"
   | "students"
   | "subjects"
-  | "subject-groups";
+  | "subject-groups"
+  | "class-teacher"
+  | "teachers";
 
 export function getPostTitle(type: PostType): string {
   const mapping: Record<PostType, string> = {
@@ -18,6 +20,8 @@ export function getPostTitle(type: PostType): string {
     students: "Student",
     subjects: "Subject",
     "subject-groups": "Subject Group",
+    "class-teacher": "Class Teacher",
+    teachers: "Teacher",
   };
 
   return mapping[type] || type;

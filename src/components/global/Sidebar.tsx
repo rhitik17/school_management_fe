@@ -43,7 +43,7 @@ const navSections = [
       {
         name: "Assign Class Teacher",
         icon: <Icons.Calender size={20} />,
-        path: "/assign-class-teacher",
+        path: "/class-teachers",
       },
     ],
   },

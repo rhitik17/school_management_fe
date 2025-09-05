@@ -3,13 +3,13 @@ import { listPost } from "../services/endpoints/postApi";
 import { getPostTitle, PostType } from "../types/postType";
 
 // Custom hook for class options
-export const useClassOptions = (postType: PostType) => {
+export const usePostList = (postType: PostType) => {
   const [postList, setPostList] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchClasses = async () => {
+    const fetchPostList = async () => {
       try {
         setLoading(true);
         const res = await listPost(postType);
@@ -22,7 +22,7 @@ export const useClassOptions = (postType: PostType) => {
       }
     };
 
-    fetchClasses();
+    fetchPostList();
   }, []);
 
   return { postList, loading, error };
